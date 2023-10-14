@@ -38,9 +38,10 @@ var __setFunctionName = (this && this.__setFunctionName) || function (f, name, p
     return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Category = void 0;
 const typeorm_1 = require("typeorm");
-let User = (() => {
+const Content_1 = require("./Content");
+let Category = (() => {
     let _classDecorators = [(0, typeorm_1.Entity)()];
     let _classDescriptor;
     let _classExtraInitializers = [];
@@ -48,31 +49,31 @@ let User = (() => {
     let _instanceExtraInitializers = [];
     let _id_decorators;
     let _id_initializers = [];
-    let _username_decorators;
-    let _username_initializers = [];
-    let _password_decorators;
-    let _password_initializers = [];
-    var User = _classThis = class {
+    let _title_decorators;
+    let _title_initializers = [];
+    let _contents_decorators;
+    let _contents_initializers = [];
+    var Category = _classThis = class {
         constructor() {
             this.id = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _id_initializers, void 0));
-            this.username = __runInitializers(this, _username_initializers, void 0);
-            this.password = __runInitializers(this, _password_initializers, void 0);
+            this.title = __runInitializers(this, _title_initializers, void 0);
+            this.contents = __runInitializers(this, _contents_initializers, void 0);
         }
     };
-    __setFunctionName(_classThis, "User");
+    __setFunctionName(_classThis, "Category");
     (() => {
         const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
         _id_decorators = [(0, typeorm_1.PrimaryGeneratedColumn)()];
-        _username_decorators = [(0, typeorm_1.Column)()];
-        _password_decorators = [(0, typeorm_1.Column)()];
+        _title_decorators = [(0, typeorm_1.Column)()];
+        _contents_decorators = [(0, typeorm_1.OneToMany)(type => Content_1.Content, content => content.category)];
         __esDecorate(null, null, _id_decorators, { kind: "field", name: "id", static: false, private: false, access: { has: obj => "id" in obj, get: obj => obj.id, set: (obj, value) => { obj.id = value; } }, metadata: _metadata }, _id_initializers, _instanceExtraInitializers);
-        __esDecorate(null, null, _username_decorators, { kind: "field", name: "username", static: false, private: false, access: { has: obj => "username" in obj, get: obj => obj.username, set: (obj, value) => { obj.username = value; } }, metadata: _metadata }, _username_initializers, _instanceExtraInitializers);
-        __esDecorate(null, null, _password_decorators, { kind: "field", name: "password", static: false, private: false, access: { has: obj => "password" in obj, get: obj => obj.password, set: (obj, value) => { obj.password = value; } }, metadata: _metadata }, _password_initializers, _instanceExtraInitializers);
+        __esDecorate(null, null, _title_decorators, { kind: "field", name: "title", static: false, private: false, access: { has: obj => "title" in obj, get: obj => obj.title, set: (obj, value) => { obj.title = value; } }, metadata: _metadata }, _title_initializers, _instanceExtraInitializers);
+        __esDecorate(null, null, _contents_decorators, { kind: "field", name: "contents", static: false, private: false, access: { has: obj => "contents" in obj, get: obj => obj.contents, set: (obj, value) => { obj.contents = value; } }, metadata: _metadata }, _contents_initializers, _instanceExtraInitializers);
         __esDecorate(null, _classDescriptor = { value: _classThis }, _classDecorators, { kind: "class", name: _classThis.name, metadata: _metadata }, null, _classExtraInitializers);
-        User = _classThis = _classDescriptor.value;
+        Category = _classThis = _classDescriptor.value;
         if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         __runInitializers(_classThis, _classExtraInitializers);
     })();
-    return User = _classThis;
+    return Category = _classThis;
 })();
-exports.User = User;
+exports.Category = Category;

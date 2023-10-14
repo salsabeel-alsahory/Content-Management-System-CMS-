@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npx tsc",
-    "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "build-tsc": "tsc -w",
+    "run-watch": "nodemon ./dist/app.js",
+    "dev": "concurrently \"npm:build-tsc\"  \"npm:run-watch\""
+    
   },
   "author": "",
   "license": "ISC",
