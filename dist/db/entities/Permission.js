@@ -9,24 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Tag = void 0;
+exports.Permission = void 0;
 const typeorm_1 = require("typeorm");
-const Content_1 = require("./Content");
-let Tag = class Tag extends typeorm_1.BaseEntity {
+const Role_js_1 = require("./Role.js");
+let Permission = class Permission extends typeorm_1.BaseEntity {
 };
-exports.Tag = Tag;
+exports.Permission = Permission;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Tag.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
     __metadata("design:type", String)
-], Tag.prototype, "title", void 0);
+], Permission.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(type => Content_1.Content, content => content.tags),
+    (0, typeorm_1.Column)({
+        unique: true
+    }),
+    __metadata("design:type", String)
+], Permission.prototype, "name", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => Role_js_1.Role, role => role.permissions),
     __metadata("design:type", Array)
-], Tag.prototype, "contents", void 0);
-exports.Tag = Tag = __decorate([
-    (0, typeorm_1.Entity)('tag')
-], Tag);
+], Permission.prototype, "roles", void 0);
+exports.Permission = Permission = __decorate([
+    (0, typeorm_1.Entity)('permissions')
+], Permission);

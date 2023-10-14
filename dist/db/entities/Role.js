@@ -9,24 +9,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Tag = void 0;
+exports.Role = void 0;
 const typeorm_1 = require("typeorm");
-const Content_1 = require("./Content");
-let Tag = class Tag extends typeorm_1.BaseEntity {
+const Permission_js_1 = require("./Permission.js");
+const userdb_js_1 = require("./userdb.js");
+let Role = class Role extends typeorm_1.BaseEntity {
 };
-exports.Tag = Tag;
+exports.Role = Role;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
-], Tag.prototype, "id", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)('increment'),
     __metadata("design:type", String)
-], Tag.prototype, "title", void 0);
+], Role.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(type => Content_1.Content, content => content.tags),
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: ['user', 'admin', 'editor'],
+        default: "user",
+        unique: true
+    }),
+    __metadata("design:type", String)
+], Role.prototype, "name", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => userdb_js_1.User, user => user.roles, { cascade: true }),
     __metadata("design:type", Array)
-], Tag.prototype, "contents", void 0);
-exports.Tag = Tag = __decorate([
-    (0, typeorm_1.Entity)('tag')
-], Tag);
+], Role.prototype, "users", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => Permission_js_1.Permission, { cascade: true, eager: true }),
+    (0, typeorm_1.JoinTable)(),
+    __metadata("design:type", Array)
+], Role.prototype, "permissions", void 0);
+exports.Role = Role = __decorate([
+    (0, typeorm_1.Entity)('roles')
+], Role);
