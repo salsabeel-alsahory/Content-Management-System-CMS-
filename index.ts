@@ -1,5 +1,4 @@
 import express from 'express';
-import { createConnection } from 'typeorm';
 import dataSource from './db/dataSource';
 import logger from 'morgan'
 const app = express();

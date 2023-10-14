@@ -4,6 +4,9 @@ import { User } from "./entities/userdb";
 import { Profile } from "./entities/Profile";
 import { Role } from "./entities/Role";
 import { Permission } from "./entities/Permission";
+import { Content } from "./entities/Content";
+import { Tag } from "./entities/Tag";
+import { Category } from "./entities/Category";
 
 dotenv.config()
 const dataSource = new DataSource({
@@ -17,7 +20,10 @@ const dataSource = new DataSource({
         User,
         Profile,
         Role,
-        Permission
+        Permission,
+        Content,
+        Tag,
+        Category
     ],
     migrations: ['./**/migration/*.ts'],
     synchronize: true,
