@@ -9,24 +9,47 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Tag = void 0;
+exports.Media = void 0;
 const typeorm_1 = require("typeorm");
-const Content_1 = require("./Content");
-let Tag = class Tag extends typeorm_1.BaseEntity {
+let Media = class Media {
 };
-exports.Tag = Tag;
+exports.Media = Media;
 __decorate([
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], Tag.prototype, "id", void 0);
+], Media.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], Tag.prototype, "title", void 0);
+], Media.prototype, "title", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(type => Content_1.Content, content => content.tags),
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Media.prototype, "cover_image", void 0);
+__decorate([
+    (0, typeorm_1.Column)("json"),
     __metadata("design:type", Array)
-], Tag.prototype, "contents", void 0);
-exports.Tag = Tag = __decorate([
-    (0, typeorm_1.Entity)('tag')
-], Tag);
+], Media.prototype, "images", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], Media.prototype, "video_link", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: "enum",
+        enum: ["Album", "Video"],
+        default: "Album",
+    }),
+    __metadata("design:type", String)
+], Media.prototype, "type", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
+], Media.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", Date)
+], Media.prototype, "updatedAt", void 0);
+exports.Media = Media = __decorate([
+    (0, typeorm_1.Entity)()
+], Media);
