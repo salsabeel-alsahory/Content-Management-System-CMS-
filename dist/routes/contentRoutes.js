@@ -36,7 +36,7 @@ router.post("/login", (req, res) => {
 router.get('/', authMiddleware_js_1.authenticate, (req, res, next) => {
     (0, user_js_1.getAllUsers)().then(data => {
         res.status(200).send(data);
-    }).catch((error) => {
+    }).catch(error => {
         res.status(404).send(error);
     });
 });
@@ -53,7 +53,7 @@ router.post('/permission', (req, res, next) => {
 router.get('/permission', authMiddleware_js_1.authenticate, function (req, res, next) {
     (0, user_js_1.getAllPermission)().then(data => {
         res.status(200).send(data);
-    }).catch((error) => {
+    }).catch(error => {
         console.log(error);
         res.status(500).send("something went wrong");
     });
@@ -61,14 +61,14 @@ router.get('/permission', authMiddleware_js_1.authenticate, function (req, res, 
 router.post('/role', (req, res, next) => {
     (0, user_js_1.createRole)(req.body).then(data => {
         res.status(201).send(data);
-    }).catch((error) => {
+    }).catch(error => {
         res.status(500).send("something went wrong");
     });
 });
 router.get('/roles', authMiddleware_js_1.authenticate, function (req, res, next) {
     (0, user_js_1.getAllRoles)().then(data => {
         res.status(200).send(data);
-    }).catch((error) => {
+    }).catch(error => {
         console.log(error);
         res.status(500).send("something went wrong");
     });

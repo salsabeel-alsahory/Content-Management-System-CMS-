@@ -1,10 +1,7 @@
 import express from 'express'
 import { createPermission, createRole, createUser, getAllPermission, getAllRoles, getAllUsers, login } from '../controllers/user.js';
 import { authenticate } from '../middleware/authMiddleware.js';
-
 const router = express.Router();
-
-
 
 router.post("/signup", async (req, res) => {
   try {
@@ -26,7 +23,7 @@ router.post("/login", (req, res) => {
   if (req.body.email && req.body.password) {
     login(req.body.email, req.body.password).then((data) => {
       res.status(200).send(data)
-    }).catch((error: Error) => {
+    }).catch((error) => {
       res.status(400).send(error)
     })
   } else {
@@ -38,7 +35,7 @@ router.post("/login", (req, res) => {
 router.get('/', authenticate, (req, res, next) => {
   getAllUsers().then(data => {
     res.status(200).send(data)
-  }).catch((error: Error) => {
+  }).catch(error => {
     res.status(404).send(error)
   })
 });
@@ -60,7 +57,7 @@ router.post('/permission', (req, res, next) => {
 router.get('/permission', authenticate, function (req, res, next) {
   getAllPermission().then(data => {
     res.status(200).send(data)
-  }).catch((error: Error)=> {
+  }).catch(error => {
     console.log(error);
     res.status(500).send("something went wrong")
   })
@@ -71,7 +68,7 @@ router.get('/permission', authenticate, function (req, res, next) {
 router.post('/role', (req, res, next) => {
   createRole(req.body).then(data => {
     res.status(201).send(data)
-  }).catch((error: Error)=> {
+  }).catch(error => {
     res.status(500).send("something went wrong")
   })
 });
@@ -82,7 +79,7 @@ router.post('/role', (req, res, next) => {
 router.get('/roles', authenticate, function (req, res, next) {
   getAllRoles().then(data => {
     res.status(200).send(data)
-  }).catch((error: Error) => {
+  }).catch(error => {
     console.log(error);
     res.status(500).send("something went wrong")
   })

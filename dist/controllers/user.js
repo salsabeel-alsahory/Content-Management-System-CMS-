@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllPermission = exports.getAllRoles = exports.createRole = exports.createPermission = exports.getAllUsers = exports.login = exports.createUser = void 0;
+exports.createContent = exports.getAllPermission = exports.getAllRoles = exports.createRole = exports.createPermission = exports.getAllUsers = exports.login = exports.createUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const Role_js_1 = require("../db/entities/Role.js");
@@ -11,6 +11,7 @@ const Permission_js_1 = require("../db/entities/Permission.js");
 const typeorm_1 = require("typeorm");
 const dataSource_js_1 = __importDefault(require("../db/dataSource.js"));
 const userdb_js_1 = require("../db/entities/userdb.js");
+const Content_js_1 = require("../db/entities/Content.js");
 const createUser = (payload) => {
     return dataSource_js_1.default.manager.transaction(async (transaction) => {
         const role = await Role_js_1.Role.findOneBy({ name: payload.role });
@@ -92,3 +93,16 @@ const getAllPermission = () => {
     return permission;
 };
 exports.getAllPermission = getAllPermission;
+const createContent = async (payload) => {
+    try {
+        // Create a new content item based on the payload
+        const newContent = Content_js_1.Content.create(payload);
+        // Save the new content item to the database
+        await newContent.save();
+        return newContent; // Return the newly created content
+    }
+    catch (error) {
+        throw ('Failed to create content: ' + error);
+    }
+};
+exports.createContent = createContent;

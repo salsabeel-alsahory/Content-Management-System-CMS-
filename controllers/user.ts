@@ -7,6 +7,7 @@ import { In } from "typeorm";
 import dataSource from "../db/dataSource.js";
 import { User } from "../db/entities/userdb.js";
 import { UserNS } from "../@types/user.js";
+import { Content } from "../db/entities/Content.js";
 
 
 const createUser = (payload: UserNS.User) => {
@@ -93,4 +94,18 @@ const getAllPermission = () => {
     return permission
 }
 
-export { createUser, login, getAllUsers, createPermission, createRole, getAllRoles, getAllPermission }
+const createContent = async (payload: Content) => {
+    try {
+        // Create a new content item based on the payload
+        const newContent = Content.create(payload);
+
+        // Save the new content item to the database
+        await newContent.save();
+
+        return newContent; // Return the newly created content
+    } catch (error) {
+        throw ('Failed to create content: ' + error);
+    }
+};
+
+export { createUser, login, getAllUsers, createPermission, createRole, getAllRoles, getAllPermission,createContent }
