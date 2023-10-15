@@ -1,5 +1,5 @@
 import express from 'express'
-import { createPermission, createRole, createUser, getAllPermission, getAllRoles, getAllUsers, login } from '../controllers/user.js';
+import { createContent, createPermission, createRole, createUser, getAllContent, getAllPermission, getAllRoles, getAllUsers, login } from '../controllers/user.js';
 import { authenticate } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
@@ -83,6 +83,27 @@ router.get('/roles', authenticate, function (req, res, next) {
     console.log(error);
     res.status(500).send("something went wrong")
   })
+});
+router.get('/content', authenticate, (req, res) => {
+  getAllContent()
+    .then((data) => {
+      res.status(200).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Something went wrong');
+    });
+});
+
+router.post('/content', authenticate, (req, res) => {
+  createContent(req.body)
+    .then((data) => {
+      res.status(201).send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Something went wrong');
+    });
 });
 
 export default router;

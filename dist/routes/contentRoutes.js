@@ -73,4 +73,24 @@ router.get('/roles', authMiddleware_js_1.authenticate, function (req, res, next)
         res.status(500).send("something went wrong");
     });
 });
+router.get('/content', authMiddleware_js_1.authenticate, (req, res) => {
+    (0, user_js_1.getAllContent)()
+        .then((data) => {
+        res.status(200).send(data);
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Something went wrong');
+    });
+});
+router.post('/content', authMiddleware_js_1.authenticate, (req, res) => {
+    (0, user_js_1.createContent)(req.body)
+        .then((data) => {
+        res.status(201).send(data);
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Something went wrong');
+    });
+});
 exports.default = router;
