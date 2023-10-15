@@ -19,9 +19,20 @@ export class Profile extends BaseEntity {
 
     @Column({
         type: 'enum',
-        enum: ['create_post', 'edit_user', 'delete_comment'],
+        enum: [
+            'create_post',
+            'edit_user',
+            'delete_comment',
+            'edit_post',
+            'delete_post',
+            'publish_post',
+            'moderate_comments',
+            'edit_category',
+            'manage_tags',
+            'edit_profile'
+        ],
     })
-    name: 'create_post' | 'edit_user' | 'delete_comment';
+    name:     'create_post' | 'edit_user' | 'delete_comment' | 'edit_post' | 'delete_post' | 'publish_post' | 'moderate_comments' | 'edit_category' | 'manage_tags' | 'edit_profile';
 
     @OneToOne(() => User, user => user.profile)
     @JoinColumn()
