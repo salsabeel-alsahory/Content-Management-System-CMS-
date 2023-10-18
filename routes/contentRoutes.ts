@@ -13,10 +13,12 @@ import {
   updateCategory,
   updateMedia
 } from '../controllers/user.js';
+import { loginValidationRules, signupValidationRules, validate } from '../middleware/validation.js';
+
 import { authenticate } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", signupValidationRules(), validate, async (req:any, res:any) => {
   try {
     const { email, password, userName, displayName, role } = req.body;
     if (!email || !password || !userName || !displayName || !role) {
@@ -32,7 +34,7 @@ router.post("/signup", async (req, res) => {
 
 
 
-router.post("/login", (req, res) => {
+router.post("/login", loginValidationRules(), validate, (req:any, res:any) => {
   if (req.body.email && req.body.password) {
     login(req.body.email, req.body.password).then((data) => {
       res.status(200).send(data)
