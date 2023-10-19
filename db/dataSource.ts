@@ -4,7 +4,7 @@ import { User } from "./entities/userdb";
 import { Profile } from "./entities/Profile";
 import { Role } from "./entities/Role";
 import { Permission } from "./entities/Permission";
-import { Content } from "./entities/Content";
+import { Article,  Content, Video } from "./entities/Content";
 import { Tag } from "./entities/Tag";
 import { Category } from "./entities/Category";
 
@@ -23,7 +23,9 @@ const dataSource = new DataSource({
         Permission,
         Content,
         Tag,
-        Category
+        Category,
+        Video,
+        Article
     ],
     migrations: ['./**/migration/*.ts'],
     synchronize: true,

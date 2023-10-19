@@ -1,5 +1,5 @@
 import express from 'express'
-import { createContent, createPermission, createRole, createUser, getAllContent, getAllPermission, getAllRoles, getAllUsers, login } from '../controllers/user.js';
+import { createArticle,  createContent, createPermission, createRole, createUser, createVideo, getAllArticles,  getAllContent, getAllPermission, getAllRoles, getAllUsers, getAllVideos, login } from '../controllers/user.js';
 import { authenticate } from '../middleware/authMiddleware.js';
 const router = express.Router();
 
@@ -105,5 +105,69 @@ router.post('/content', authenticate, (req, res) => {
       res.status(500).send('Something went wrong');
     });
 });
+//-----------------------------------------------------------------
+
+router.post('/article/create', authenticate, async (req, res) => {
+  try {
+    const articleData = req.body; // Assuming the article data is in the request body
+    const article = await createArticle(articleData);
+    res.status(201).json(article);
+  } catch (error) {
+    console.error('Error creating article:', error);
+    res.status(500).json({ error: 'Failed to create article' });
+  }
+});
+
+router.post('/videos', async (req, res) => {
+  try {
+    const videoData = req.body; // Assuming the video data is in the request body
+    const video = await createVideo(videoData);
+    res.status(201).json(video);
+  } catch (error) {
+    console.error('Error creating video:', error);
+    res.status(500).json({ error: 'Failed to create video' });
+  }
+});
+
+// router.post('/audio', authenticate, async (req, res) => {
+//   try {
+//     const audioData = req.body; // Assuming the audio data is in the request body
+//     const audio = await createAudio(audioData);
+//     res.status(201).json(audio);
+//   } catch (error) {
+//     console.error('Error creating audio:', error);
+//     res.status(500).json({ error: 'Failed to create audio' });
+//   }
+// });
+
+// router.get('/audio', authenticate, async (req, res) => {
+//   try {
+//     const audios = await getAllAudio(); // Define a function like getAllAudio to fetch all audio entries
+//     res.status(200).json(audios);
+//   } catch (error) {
+//     console.error('Error fetching audio:', error);
+//     res.status(500).json({ error: 'Failed to retrieve audio' });
+//   }
+// });
+router.get('/videos', async (req, res) => {
+  try {
+    const videos = await getAllVideos(); // Define a function like getAllVideos to fetch all video entries
+    res.status(200).json(videos);
+  } catch (error) {
+    console.error('Error fetching videos:', error);
+    res.status(500).json({ error: 'Failed to retrieve videos' });
+  }
+});
+
+router.get('/articles', authenticate, async (req, res) => {
+  try {
+    const articles = await getAllArticles(); // Define a function like getAllArticles to fetch all article entries
+    res.status(200).json(articles);
+  } catch (error) {
+    console.error('Error fetching articles:', error);
+    res.status(500).json({ error: 'Failed to retrieve articles' });
+  }
+});
+
 
 export default router;

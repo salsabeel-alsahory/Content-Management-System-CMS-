@@ -27,7 +27,9 @@ const dataSource = new typeorm_1.DataSource({
         Permission_1.Permission,
         Content_1.Content,
         Tag_1.Tag,
-        Category_1.Category
+        Category_1.Category,
+        Content_1.Video,
+        Content_1.Article
     ],
     migrations: ['./**/migration/*.ts'],
     synchronize: true,

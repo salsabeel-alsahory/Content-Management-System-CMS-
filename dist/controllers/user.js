@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllContent = exports.createContent = exports.getAllPermission = exports.getAllRoles = exports.createRole = exports.createPermission = exports.getAllUsers = exports.login = exports.createUser = void 0;
+exports.getAllVideos = exports.getAllArticles = exports.createArticle = exports.createVideo = exports.getAllContent = exports.createContent = exports.getAllPermission = exports.getAllRoles = exports.createRole = exports.createPermission = exports.getAllUsers = exports.login = exports.createUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const Role_js_1 = require("../db/entities/Role.js");
@@ -136,3 +136,59 @@ const createContent = async (payload) => {
     }
 };
 exports.createContent = createContent;
+const createVideo = async (payload) => {
+    try {
+        const video = Content_js_1.Video.create(payload);
+        await video.save();
+        console.log("here is worke ");
+        return video; // Return the newly created video
+    }
+    catch (error) {
+        if (error instanceof typeorm_1.QueryFailedError) {
+            // Handle database query errors (e.g., unique constraint violations)
+            throw 'Database error: ' + error.toString();
+        }
+        else {
+            throw 'Failed to create video: ' + error.toString();
+        }
+    }
+};
+exports.createVideo = createVideo;
+const createArticle = async (payload) => {
+    try {
+        const article = Content_js_1.Article.create(payload);
+        await article.save();
+        return article;
+    }
+    catch (error) {
+        if (error instanceof typeorm_1.QueryFailedError) {
+            throw ('Database error: ' + error.toString());
+        }
+        else {
+            throw 'Failed to create video: ' + error.toString();
+        }
+    }
+};
+exports.createArticle = createArticle;
+async function getAllArticles() {
+    try {
+        const articles = await Content_js_1.Article.find();
+        return articles;
+    }
+    catch (error) {
+        console.error('Error fetching articles:', error);
+        throw new Error('Failed to retrieve articles');
+    }
+}
+exports.getAllArticles = getAllArticles;
+async function getAllVideos() {
+    try {
+        const videos = await Content_js_1.Video.find();
+        return videos;
+    }
+    catch (error) {
+        console.error('Error fetching videos:', error);
+        throw new Error('Failed to retrieve videos');
+    }
+}
+exports.getAllVideos = getAllVideos;

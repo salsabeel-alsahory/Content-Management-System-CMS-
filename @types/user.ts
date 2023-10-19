@@ -1,3 +1,6 @@
+import { Category } from "../db/entities/Category";
+import { Tag } from "../db/entities/Tag";
+
 export namespace UserNS {
 
     export interface User {
@@ -17,5 +20,33 @@ export namespace UserNS {
         id: number,
         name: string,
     }
-
+    export interface Content {
+        id: number;
+        title: string;
+        content: string;
+        category: Category;
+        tags: Tag[];
+    }
+    export interface Video extends Content {
+        videoUrl: string;
+      }
+      
+      export interface Audio extends Content {
+        audioUrl: string;
+      }
+      
+      export interface Article extends Content {
+        articleContent: string;
+      }
+    export interface Category {
+        id: number;
+        name: string;
+        contents: Content[]; 
+      }
+      export interface Tag {
+        id: number;
+        title: string;
+        contents: Content[]; 
+      }
+      
 }
