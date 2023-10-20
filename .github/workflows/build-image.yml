@@ -31,7 +31,7 @@ jobs:
     - name: Publish docker image
       run: docker push ghcr.io/salsabeel-alsahory/Content-Management-System-CMS-:${{ steps.image_version.outputs.gitsha }}
     - name: configure docker host
-      uses: salsabeel-alsahory/configure-docker-host@v1
+      uses: salsabeel-alsahory/Content-Management-System-CMS-@v1
       with:
         host: 54.174.22.40
         user: github
