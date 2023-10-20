@@ -347,7 +347,7 @@ router.put('/articles/:articleId', authenticate, async (req, res) => {
 
 
 
-router.get('/media', authenticate, (req, res) => {
+router.get('/media', authenticate, authorize('get_media'),async(req, res) => {
   getAllMedia()
     .then((data: any) => {
       res.status(200).send(data);
@@ -359,7 +359,7 @@ router.get('/media', authenticate, (req, res) => {
 });
 
 
-router.post('/media', authenticate, (req, res) => {
+router.post('/media', authenticate, authorize('add_media'),async(req, res) => {
   createMedia(req.body)
     .then((data: any) => {
       res.status(201).send(data);
@@ -370,7 +370,7 @@ router.post('/media', authenticate, (req, res) => {
     });
 });
 
-router.put('/media/:id', authenticate, (req, res) => {
+router.put('/media/:id', authenticate,authorize('update_media'),async (req, res) => {
   updateMedia(req.params.id, req.body)
     .then((data: any) => {
       res.status(200).send(data);
@@ -381,7 +381,7 @@ router.put('/media/:id', authenticate, (req, res) => {
     });
 });
 
-router.delete('/media/:id', authenticate, (req, res) => {
+router.delete('/media/:id', authenticate,authorize('delete_media'),async (req, res) => {
   deleteMedia(req.params.id)
     .then(() => {
       res.status(200).send('Media deleted successfully');
@@ -393,7 +393,7 @@ router.delete('/media/:id', authenticate, (req, res) => {
 });
 
 // Category routes
-router.get('/categories', authenticate, (req, res) => {
+router.get('/categories', authenticate,authorize('get_category'),async (req, res) => {
   getAllCategories()
     .then((data: any) => {
       res.status(200).send(data);
@@ -404,7 +404,7 @@ router.get('/categories', authenticate, (req, res) => {
     });
 });
 
-router.post('/categories', authenticate, (req, res) => {
+router.post('/categories', authenticate,authorize('add_category'),async  (req, res) => {
   createCategory(req.body)
     .then((data: any) => {
       res.status(201).send(data);
@@ -415,7 +415,7 @@ router.post('/categories', authenticate, (req, res) => {
     });
 });
 
-router.put('/categories/:id', authenticate, (req, res) => {
+router.put('/categories/:id', authenticate,authorize('update_category'),async  (req, res) => {
   updateCategory(req.params.id, req.body)
     .then((data: any) => {
       res.status(200).send(data);
@@ -426,7 +426,7 @@ router.put('/categories/:id', authenticate, (req, res) => {
     });
 });
 
-router.delete('/categories/:id', authenticate, (req, res) => {
+router.delete('/categories/:id', authenticate,authorize('delete_category'),async  (req, res) => {
   deleteCategory(req.params.id)
     .then(() => {
       res.status(200).send('Category deleted successfully');
