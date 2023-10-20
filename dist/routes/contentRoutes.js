@@ -165,6 +165,28 @@ router.put('/content/:contentId', authMiddleware_js_1.authenticate, async (req, 
         res.status(500).json({ error: 'Failed to update content' });
     }
 });
+// Define a route to search for content
+router.get('/content/search', authMiddleware_js_1.authenticate, async (req, res) => {
+    try {
+        // Get search criteria from the query parameters
+        const { title, contentType } = req.query;
+        // Create a filter object based on the provided criteria
+        const filter = {};
+        if (title) {
+            filter.title = title;
+        }
+        if (contentType) {
+            filter.contentType = contentType;
+        }
+        // Search for content in the database based on the filter criteria
+        const content = await Content_js_1.Content.find({ where: filter });
+        res.status(200).json(content);
+    }
+    catch (error) {
+        console.error('Error searching for content:', error);
+        res.status(500).json({ error: 'Failed to search for content' });
+    }
+});
 //-----------------------------------------------------------------
 router.post('/article/create', authMiddleware_js_1.authenticate, async (req, res) => {
     try {
