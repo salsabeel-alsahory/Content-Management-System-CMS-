@@ -27,9 +27,9 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ghcr.io/suzanayesh/express-docker:${{ steps.image_version.outputs.gitsha }}
+      run: docker build . --file Dockerfile --tag ghcr.io/salsabeel-alsahory/Content-Management-System-CMS-:${{ steps.image_version.outputs.gitsha }}
     - name: Publish docker image
-      run: docker push ghcr.io/suzanayesh/express-docker:${{ steps.image_version.outputs.gitsha }}
+      run: docker push ghcr.io/salsabeel-alsahory/Content-Management-System-CMS-:${{ steps.image_version.outputs.gitsha }}
     - name: configure docker host
       uses: suzanayesh/configure-docker-host@v1
       with:
