@@ -23,6 +23,11 @@ export class Content extends BaseEntity {
 
   @Column({ default: 0 }) // Default value is 0
   likes: number;
+
+  // Custom method to get the content ID
+  getContentId() {
+    return this.id;
+  }
 }
 
 @Entity()

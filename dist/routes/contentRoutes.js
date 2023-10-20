@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_js_1 = require("../controllers/user.js");
 const authMiddleware_js_1 = require("../middleware/authMiddleware.js");
+const Content_js_1 = require("../db/entities/Content.js");
+const Role_js_1 = require("../db/entities/Role.js");
+const Permission_js_1 = require("../db/entities/Permission.js");
 const router = express_1.default.Router();
 router.post("/signup", async (req, res) => {
     try {
@@ -58,6 +61,28 @@ router.get('/permission', authMiddleware_js_1.authenticate, function (req, res, 
         res.status(500).send("something went wrong");
     });
 });
+// Define a route to update an existing permission
+router.put('/permissions/:permissionId', authMiddleware_js_1.authenticate, async (req, res) => {
+    try {
+        const permissionId = req.params.permissionId; // Get the permission ID from the URL
+        // Find the permission by its ID in the database
+        const permission = await Permission_js_1.Permission.findOne({ where: { id: permissionId } });
+        if (!permission) {
+            return res.status(404).json({ error: 'Permission not found' });
+        }
+        // Update permission properties with the request body
+        if (req.body.name) {
+            permission.name = req.body.name;
+        }
+        // Save the updated permission to the database
+        await permission.save();
+        res.status(200).json({ message: 'Permission updated successfully' });
+    }
+    catch (error) {
+        console.error('Error updating permission:', error);
+        res.status(500).json({ error: 'Failed to update permission' });
+    }
+});
 router.post('/role', (req, res, next) => {
     (0, user_js_1.createRole)(req.body).then(data => {
         res.status(201).send(data);
@@ -72,6 +97,28 @@ router.get('/roles', authMiddleware_js_1.authenticate, function (req, res, next)
         console.log(error);
         res.status(500).send("something went wrong");
     });
+});
+// Update an existing role
+router.put('/roles/:roleId', authMiddleware_js_1.authenticate, async (req, res) => {
+    try {
+        const roleId = req.params.roleId; // This will take the ID from the URL
+        // Find the role by its ID in the database
+        const role = await Role_js_1.Role.findOne({ where: { id: roleId } }); // Use FindOneOptions to specify the where clause
+        if (!role) {
+            return res.status(404).json({ error: 'Role not found' });
+        }
+        // Update role properties with the request body
+        if (req.body.name) {
+            role.name = req.body.name;
+        }
+        // Save the updated role to the database
+        await role.save();
+        res.status(200).json({ message: 'Role updated successfully' });
+    }
+    catch (error) {
+        console.error('Error updating role:', error);
+        res.status(500).json({ error: 'Failed to update role' });
+    }
 });
 router.get('/content', authMiddleware_js_1.authenticate, (req, res) => {
     (0, user_js_1.getAllContent)()
@@ -92,6 +139,31 @@ router.post('/content', authMiddleware_js_1.authenticate, (req, res) => {
         console.error(error);
         res.status(500).send('Something went wrong');
     });
+});
+router.put('/content/:contentId', authMiddleware_js_1.authenticate, async (req, res) => {
+    try {
+        const contentId = +req.params.contentId; // Convert the contentId to a number
+        // Check if contentId is a valid number
+        if (isNaN(contentId)) {
+            return res.status(400).json({ error: 'Invalid contentId' });
+        }
+        // Find the content by its ID in the database
+        const content = await Content_js_1.Content.findOne({ where: { id: contentId } });
+        if (!content) {
+            return res.status(404).json({ error: 'Content not found' });
+        }
+        // Update content properties with the request body
+        const { title, content: newContent } = req.body;
+        content.title = title || content.title;
+        content.content = newContent || content.content;
+        // Save the updated content to the database
+        await content.save();
+        res.status(200).json({ message: 'Content updated successfully' });
+    }
+    catch (error) {
+        console.error('Error updating content:', error);
+        res.status(500).json({ error: 'Failed to update content' });
+    }
 });
 //-----------------------------------------------------------------
 router.post('/article/create', authMiddleware_js_1.authenticate, async (req, res) => {
@@ -116,6 +188,16 @@ router.post('/videos', async (req, res) => {
         res.status(500).json({ error: 'Failed to create video' });
     }
 });
+router.get('/videos', async (req, res) => {
+    try {
+        const videos = await (0, user_js_1.getAllVideos)(); // Define a function like getAllVideos to fetch all video entries
+        res.status(200).json(videos);
+    }
+    catch (error) {
+        console.error('Error fetching videos:', error);
+        res.status(500).json({ error: 'Failed to retrieve videos' });
+    }
+});
 // router.post('/audio', authenticate, async (req, res) => {
 //   try {
 //     const audioData = req.body; // Assuming the audio data is in the request body
@@ -135,16 +217,6 @@ router.post('/videos', async (req, res) => {
 //     res.status(500).json({ error: 'Failed to retrieve audio' });
 //   }
 // });
-router.get('/videos', async (req, res) => {
-    try {
-        const videos = await (0, user_js_1.getAllVideos)(); // Define a function like getAllVideos to fetch all video entries
-        res.status(200).json(videos);
-    }
-    catch (error) {
-        console.error('Error fetching videos:', error);
-        res.status(500).json({ error: 'Failed to retrieve videos' });
-    }
-});
 router.get('/articles', authMiddleware_js_1.authenticate, async (req, res) => {
     try {
         const articles = await (0, user_js_1.getAllArticles)(); // Define a function like getAllArticles to fetch all article entries
@@ -155,4 +227,50 @@ router.get('/articles', authMiddleware_js_1.authenticate, async (req, res) => {
         res.status(500).json({ error: 'Failed to retrieve articles' });
     }
 });
+router.put('/articles/:articleId', authMiddleware_js_1.authenticate, async (req, res) => {
+    try {
+        const articleId = +req.params.articleId; // Convert the articleId to a number
+        // Check if articleId is a valid number
+        if (isNaN(articleId)) {
+            return res.status(400).json({ error: 'Invalid articleId' });
+        }
+        // Find the article by its ID in the database
+        const article = await Content_js_1.Article.findOne({ where: { id: articleId } });
+        if (!article) {
+            return res.status(404).json({ error: 'Article not found' });
+        }
+        // Update article properties with the request body
+        const { title, articleContent: newContent } = req.body;
+        article.title = title || article.title;
+        article.articleContent = newContent || article.articleContent;
+        // Save the updated article to the database
+        await article.save();
+        res.status(200).json({ message: 'Article updated successfully' });
+    }
+    catch (error) {
+        console.error('Error updating article:', error);
+        res.status(500).json({ error: 'Failed to update article' });
+    }
+});
+// router.post('/content/like/:contentId', authenticate, async (req, res) => {
+//   try {
+//     const contentId = +req.params.contentId; // Convert the contentId to a number
+//     // Check if contentId is a valid number
+//     if (isNaN(contentId)) {
+//       return res.status(400).json({ error: 'Invalid contentId' });
+//     }
+//     // Find the content by its ID in the database
+//     const content = await Content.findOne({ where: { id: contentId } });
+//     if (!content) {
+//       return res.status(404).json({ error: 'Content not found' });
+//     }
+//     // Increment likes for the existing content
+//     const updatedContent = await incrementLikes(content);
+//     console.log('Updated Content:', updatedContent);
+//     res.status(200).json({ message: 'Content liked successfully' });
+//   } catch (error) {
+//     console.error('Error liking content:', error);
+//     res.status(500).json({ error: 'Failed to like content' });
+//   }
+// });
 exports.default = router;

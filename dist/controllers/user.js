@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllVideos = exports.getAllArticles = exports.createArticle = exports.createVideo = exports.getAllContent = exports.createContent = exports.getAllPermission = exports.getAllRoles = exports.createRole = exports.createPermission = exports.getAllUsers = exports.login = exports.createUser = void 0;
+exports.incrementLikes = exports.getAllVideos = exports.getAllArticles = exports.createArticle = exports.createVideo = exports.getAllContent = exports.createContent = exports.getAllPermission = exports.getAllRoles = exports.createRole = exports.createPermission = exports.getAllUsers = exports.login = exports.createUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const Role_js_1 = require("../db/entities/Role.js");
@@ -192,3 +192,29 @@ async function getAllVideos() {
     }
 }
 exports.getAllVideos = getAllVideos;
+const incrementLikes = async (content) => {
+    try {
+        if (!content || !content.getContentId) {
+            throw 'Invalid content object or missing getContentId method';
+        }
+        // Get the content ID using the getContentId method
+        const contentId = content.getContentId();
+        if (!contentId) {
+            throw 'Content ID is missing or invalid';
+        }
+        // Find the content by its ID
+        const foundContent = await Content_js_1.Content.findOne(contentId);
+        if (!foundContent) {
+            throw 'Content not found';
+        }
+        // Increment the likes
+        foundContent.likes++;
+        // Save the updated content to the database
+        await foundContent.save();
+        return foundContent;
+    }
+    catch (error) {
+        throw `Failed to increment likes: ${error}`;
+    }
+};
+exports.incrementLikes = incrementLikes;

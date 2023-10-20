@@ -14,6 +14,10 @@ const typeorm_1 = require("typeorm");
 const Category_1 = require("../entities/Category");
 const Tag_1 = require("./Tag");
 let Content = class Content extends typeorm_1.BaseEntity {
+    // Custom method to get the content ID
+    getContentId() {
+        return this.id;
+    }
 };
 exports.Content = Content;
 __decorate([

@@ -180,6 +180,40 @@ const createVideo = async (payload: Video) => {
       throw new Error('Failed to retrieve videos');
     }
   }
+  const incrementLikes = async (content: { getContentId?: () => any; }) => {
+    try {
+      if (!content || !content.getContentId) {
+        throw 'Invalid content object or missing getContentId method';
+      }
+  
+      // Get the content ID using the getContentId method
+      const contentId = content.getContentId();
+      
+      if (!contentId) {
+        throw 'Content ID is missing or invalid';
+      }
+      
+      // Find the content by its ID
+      const foundContent = await Content.findOne(contentId);
+  
+      if (!foundContent) {
+        throw 'Content not found';
+      }
+  
+      // Increment the likes
+      foundContent.likes++;
+  
+      // Save the updated content to the database
+      await foundContent.save();
+  
+      return foundContent;
+    } catch (error) {
+      throw `Failed to increment likes: ${error}`;
+    }
+  };
+  
+
+
 export { createUser, login, getAllUsers, createPermission, createRole, getAllRoles, getAllPermission, createContent, getAllContent,createVideo
  ,createArticle , getAllArticles
-,getAllVideos };
+,getAllVideos, incrementLikes };
