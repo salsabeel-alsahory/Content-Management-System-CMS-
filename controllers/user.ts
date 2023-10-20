@@ -1,13 +1,15 @@
-import jwt from "jsonwebtoken";
 import bcrypt from 'bcrypt';
-import { Role } from "../db/entities/Role.js";
-import { Permission } from "../db/entities/Permission.js";
+import jwt from "jsonwebtoken";
 import { In, QueryFailedError } from "typeorm";
 import dataSource from "../db/dataSource.js";
+import { Permission } from "../db/entities/Permission.js";
+import { Role } from "../db/entities/Role.js";
 
 import { UserNS } from "../@types/user.js";
-import { User } from "../db/entities/userdb.js";
+import { Category } from "../db/entities/Category.js";
 import { Article, Content, Video } from "../db/entities/Content.js";
+import { Media } from "../db/entities/Media.js";
+import { User } from "../db/entities/userdb.js";
 
 const createUser = (payload: UserNS.User) => {
     return dataSource.manager.transaction(async transaction => {
@@ -210,10 +212,113 @@ const createVideo = async (payload: Video) => {
     } catch (error) {
       throw `Failed to increment likes: ${error}`;
     }
+    
   };
   
 
 
-export { createUser, login, getAllUsers, createPermission, createRole, getAllRoles, getAllPermission, createContent, getAllContent,createVideo
- ,createArticle , getAllArticles
-,getAllVideos, incrementLikes };
+
+  const createMedia = async (payload: Media) => {
+    try {
+        const newMedia = new Media();
+        newMedia.name = payload.name;
+        newMedia.permissions = await Permission.findBy({
+                        id: In(payload.permissions)
+                    });
+        await newMedia.save();
+    } catch (error) {
+        throw ("Failed to create media: " + error);
+    }
+};
+
+const getAllMedia = async () => {
+  try {
+    const media = await Media.find();
+    return media;
+  } catch (error) {
+    throw new Error("Something went wrong");
+  }
+};
+
+const updateMedia = async (id: string, payload: Media) => {
+    try {
+        const mediaToUpdate = await Media.findOne({  where: {id:(id)}  }  );
+        if (mediaToUpdate) {
+            Object.assign(mediaToUpdate, payload);
+            await mediaToUpdate.save();
+            return mediaToUpdate;
+        } else {
+            throw ("Media not found");
+        }
+    } catch (error) {
+        throw ("Failed to update media: " + error);
+    }
+};
+
+const deleteMedia = async (id: string) => {
+    try {
+        const mediaToDelete = await Media.findOne({  where: {id:(id)}  }  );
+        if (mediaToDelete) {
+            await Media.remove(mediaToDelete);
+        } else {
+            throw ("Media not found");
+        }
+    } catch (error) {
+        throw ("Failed to delete media: " + error);
+    }
+};
+
+// Category functions
+const createCategory = async (payload: Category) => {
+    try {
+        const newCategory = Category.create(payload);
+        await newCategory.save();
+        return newCategory;
+    } catch (error) {
+        throw ("Failed to create category: " + error);
+    }
+};
+
+const getAllCategories = () => {
+    try {
+        return Category.find();
+    } catch (error) {
+        throw ("Something went wrong");
+    }
+};
+
+const updateCategory = async (id: string, payload: Category) => {
+    try {
+        const categoryToUpdate = await Category.findOne({
+            where: {id: Number(id)}
+            }
+            );
+        if (categoryToUpdate) {
+            Object.assign(categoryToUpdate, payload);
+            await categoryToUpdate.save();
+            return categoryToUpdate;
+        } else {
+            throw ("Category not found");
+        }
+    } catch (error) {
+        throw ("Failed to update category: " + error);
+    }
+};
+
+const deleteCategory = async (id: string) => {
+    try {
+        const categoryToDelete = await Category.findOne({
+            where: {id: Number(id)}
+            }
+            );
+        if (categoryToDelete) {
+            await Category.remove(categoryToDelete);
+        } else {
+            throw ("Category not found");
+        }
+    } catch (error) {
+        throw ("Failed to delete category: " + error);
+    }
+};
+export { createArticle, createCategory, createContent, createMedia, createPermission, createRole, createUser, createVideo, deleteCategory, deleteMedia, getAllArticles, getAllCategories, getAllContent, getAllMedia, getAllPermission, getAllRoles, getAllUsers, getAllVideos, incrementLikes, login, updateCategory, updateMedia };
+

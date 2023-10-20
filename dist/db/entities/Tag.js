@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tag = void 0;
 const typeorm_1 = require("typeorm");
 const Content_1 = require("./Content");
+const Media_1 = require("./Media");
 let Tag = class Tag extends typeorm_1.BaseEntity {
 };
 exports.Tag = Tag;
@@ -27,6 +28,10 @@ __decorate([
     (0, typeorm_1.ManyToMany)(type => Content_1.Content, content => content.tags),
     __metadata("design:type", Array)
 ], Tag.prototype, "contents", void 0);
+__decorate([
+    (0, typeorm_1.ManyToMany)(() => Media_1.Media, (media) => media.tags),
+    __metadata("design:type", Array)
+], Tag.prototype, "videos", void 0);
 exports.Tag = Tag = __decorate([
     (0, typeorm_1.Entity)('tag')
 ], Tag);

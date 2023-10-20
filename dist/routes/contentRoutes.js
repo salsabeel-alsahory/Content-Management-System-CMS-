@@ -5,12 +5,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_js_1 = require("../controllers/user.js");
-const authMiddleware_js_1 = require("../middleware/authMiddleware.js");
 const Content_js_1 = require("../db/entities/Content.js");
-const Role_js_1 = require("../db/entities/Role.js");
 const Permission_js_1 = require("../db/entities/Permission.js");
+const Role_js_1 = require("../db/entities/Role.js");
+const authMiddleware_js_1 = require("../middleware/authMiddleware.js");
+const authorize_js_1 = require("../middleware/authorize.js");
+const validator_js_1 = require("../middleware/validator.js");
 const router = express_1.default.Router();
-router.post("/signup", async (req, res) => {
+router.post("/signup", (0, validator_js_1.signupValidationRules)(), validator_js_1.validate, async (req, res) => {
     try {
         const { email, password, userName, displayName, role } = req.body;
         if (!email || !password || !userName || !displayName || !role) {
@@ -24,7 +26,7 @@ router.post("/signup", async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
-router.post("/login", (req, res) => {
+router.post("/login", (0, validator_js_1.loginValidationRules)(), validator_js_1.validate, (req, res) => {
     if (req.body.email && req.body.password) {
         (0, user_js_1.login)(req.body.email, req.body.password).then((data) => {
             res.status(200).send(data);
@@ -36,7 +38,7 @@ router.post("/login", (req, res) => {
         res.status(404).send("email and password are required");
     }
 });
-router.get('/', authMiddleware_js_1.authenticate, (req, res, next) => {
+router.get('/', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('view_users'), (req, res, next) => {
     (0, user_js_1.getAllUsers)().then(data => {
         res.status(200).send(data);
     }).catch(error => {
@@ -44,7 +46,7 @@ router.get('/', authMiddleware_js_1.authenticate, (req, res, next) => {
     });
 });
 /* POST permission. --------------------------------------------------------------------------------------------------*/
-router.post('/permission', (req, res, next) => {
+router.post('/permission', (0, authorize_js_1.authorize)('create_permission'), (req, res, next) => {
     try {
         (0, user_js_1.createPermission)(req.body);
         res.status(201).send("permission created successfully");
@@ -53,7 +55,7 @@ router.post('/permission', (req, res, next) => {
         res.status(500).send("something went wrong");
     }
 });
-router.get('/permission', authMiddleware_js_1.authenticate, function (req, res, next) {
+router.get('/permission', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('view_permissions'), function (req, res, next) {
     (0, user_js_1.getAllPermission)().then(data => {
         res.status(200).send(data);
     }).catch(error => {
@@ -62,7 +64,7 @@ router.get('/permission', authMiddleware_js_1.authenticate, function (req, res, 
     });
 });
 // Define a route to update an existing permission
-router.put('/permissions/:permissionId', authMiddleware_js_1.authenticate, async (req, res) => {
+router.put('/permissions/:permissionId', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('update_permission'), async (req, res) => {
     try {
         const permissionId = req.params.permissionId; // Get the permission ID from the URL
         // Find the permission by its ID in the database
@@ -83,14 +85,14 @@ router.put('/permissions/:permissionId', authMiddleware_js_1.authenticate, async
         res.status(500).json({ error: 'Failed to update permission' });
     }
 });
-router.post('/role', (req, res, next) => {
+router.post('/role', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('create_role'), (req, res, next) => {
     (0, user_js_1.createRole)(req.body).then(data => {
         res.status(201).send(data);
     }).catch(error => {
         res.status(500).send("something went wrong");
     });
 });
-router.get('/roles', authMiddleware_js_1.authenticate, function (req, res, next) {
+router.get('/roles', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('view_roles'), function (req, res, next) {
     (0, user_js_1.getAllRoles)().then(data => {
         res.status(200).send(data);
     }).catch(error => {
@@ -99,7 +101,7 @@ router.get('/roles', authMiddleware_js_1.authenticate, function (req, res, next)
     });
 });
 // Update an existing role
-router.put('/roles/:roleId', authMiddleware_js_1.authenticate, async (req, res) => {
+router.put('/roles/:roleId', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('update_role'), async (req, res) => {
     try {
         const roleId = req.params.roleId; // This will take the ID from the URL
         // Find the role by its ID in the database
@@ -120,7 +122,7 @@ router.put('/roles/:roleId', authMiddleware_js_1.authenticate, async (req, res) 
         res.status(500).json({ error: 'Failed to update role' });
     }
 });
-router.get('/content', authMiddleware_js_1.authenticate, (req, res) => {
+router.get('/content', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('view_content'), (req, res) => {
     (0, user_js_1.getAllContent)()
         .then((data) => {
         res.status(200).send(data);
@@ -130,7 +132,7 @@ router.get('/content', authMiddleware_js_1.authenticate, (req, res) => {
         res.status(500).send('Something went wrong');
     });
 });
-router.post('/content', authMiddleware_js_1.authenticate, (req, res) => {
+router.post('/content', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('create_content'), (req, res) => {
     (0, user_js_1.createContent)(req.body)
         .then((data) => {
         res.status(201).send(data);
@@ -140,7 +142,7 @@ router.post('/content', authMiddleware_js_1.authenticate, (req, res) => {
         res.status(500).send('Something went wrong');
     });
 });
-router.put('/content/:contentId', authMiddleware_js_1.authenticate, async (req, res) => {
+router.put('/content/:contentId', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('update_content'), async (req, res) => {
     try {
         const contentId = +req.params.contentId; // Convert the contentId to a number
         // Check if contentId is a valid number
@@ -166,7 +168,7 @@ router.put('/content/:contentId', authMiddleware_js_1.authenticate, async (req, 
     }
 });
 // Define a route to search for content
-router.get('/content/search', authMiddleware_js_1.authenticate, async (req, res) => {
+router.get('/content/search', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('search_content'), async (req, res) => {
     try {
         // Get search criteria from the query parameters
         const { title, contentType } = req.query;
@@ -188,7 +190,7 @@ router.get('/content/search', authMiddleware_js_1.authenticate, async (req, res)
     }
 });
 //-----------------------------------------------------------------
-router.post('/article/create', authMiddleware_js_1.authenticate, async (req, res) => {
+router.post('/article/create', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('create_article'), async (req, res) => {
     try {
         const articleData = req.body; // Assuming the article data is in the request body
         const article = await (0, user_js_1.createArticle)(articleData);
@@ -239,7 +241,7 @@ router.get('/videos', async (req, res) => {
 //     res.status(500).json({ error: 'Failed to retrieve audio' });
 //   }
 // });
-router.get('/articles', authMiddleware_js_1.authenticate, async (req, res) => {
+router.get('/articles', authMiddleware_js_1.authenticate, (0, authorize_js_1.authorize)('view_articles'), async (req, res) => {
     try {
         const articles = await (0, user_js_1.getAllArticles)(); // Define a function like getAllArticles to fetch all article entries
         res.status(200).json(articles);
@@ -295,4 +297,85 @@ router.put('/articles/:articleId', authMiddleware_js_1.authenticate, async (req,
 //     res.status(500).json({ error: 'Failed to like content' });
 //   }
 // });
+router.get('/media', authMiddleware_js_1.authenticate, (req, res) => {
+    (0, user_js_1.getAllMedia)()
+        .then((data) => {
+        res.status(200).send(data);
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Something went wrong');
+    });
+});
+router.post('/media', authMiddleware_js_1.authenticate, (req, res) => {
+    (0, user_js_1.createMedia)(req.body)
+        .then((data) => {
+        res.status(201).send(data);
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Something went wrong');
+    });
+});
+router.put('/media/:id', authMiddleware_js_1.authenticate, (req, res) => {
+    (0, user_js_1.updateMedia)(req.params.id, req.body)
+        .then((data) => {
+        res.status(200).send(data);
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Something went wrong');
+    });
+});
+router.delete('/media/:id', authMiddleware_js_1.authenticate, (req, res) => {
+    (0, user_js_1.deleteMedia)(req.params.id)
+        .then(() => {
+        res.status(200).send('Media deleted successfully');
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Something went wrong');
+    });
+});
+// Category routes
+router.get('/categories', authMiddleware_js_1.authenticate, (req, res) => {
+    (0, user_js_1.getAllCategories)()
+        .then((data) => {
+        res.status(200).send(data);
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Something went wrong');
+    });
+});
+router.post('/categories', authMiddleware_js_1.authenticate, (req, res) => {
+    (0, user_js_1.createCategory)(req.body)
+        .then((data) => {
+        res.status(201).send(data);
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Something went wrong');
+    });
+});
+router.put('/categories/:id', authMiddleware_js_1.authenticate, (req, res) => {
+    (0, user_js_1.updateCategory)(req.params.id, req.body)
+        .then((data) => {
+        res.status(200).send(data);
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Something went wrong');
+    });
+});
+router.delete('/categories/:id', authMiddleware_js_1.authenticate, (req, res) => {
+    (0, user_js_1.deleteCategory)(req.params.id)
+        .then(() => {
+        res.status(200).send('Category deleted successfully');
+    })
+        .catch((error) => {
+        console.error(error);
+        res.status(500).send('Something went wrong');
+    });
+});
 exports.default = router;

@@ -3,15 +3,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.incrementLikes = exports.getAllVideos = exports.getAllArticles = exports.createArticle = exports.createVideo = exports.getAllContent = exports.createContent = exports.getAllPermission = exports.getAllRoles = exports.createRole = exports.createPermission = exports.getAllUsers = exports.login = exports.createUser = void 0;
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+exports.updateMedia = exports.updateCategory = exports.login = exports.incrementLikes = exports.getAllVideos = exports.getAllUsers = exports.getAllRoles = exports.getAllPermission = exports.getAllMedia = exports.getAllContent = exports.getAllCategories = exports.getAllArticles = exports.deleteMedia = exports.deleteCategory = exports.createVideo = exports.createUser = exports.createRole = exports.createPermission = exports.createMedia = exports.createContent = exports.createCategory = exports.createArticle = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const Role_js_1 = require("../db/entities/Role.js");
-const Permission_js_1 = require("../db/entities/Permission.js");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const typeorm_1 = require("typeorm");
 const dataSource_js_1 = __importDefault(require("../db/dataSource.js"));
-const userdb_js_1 = require("../db/entities/userdb.js");
+const Permission_js_1 = require("../db/entities/Permission.js");
+const Role_js_1 = require("../db/entities/Role.js");
+const Category_js_1 = require("../db/entities/Category.js");
 const Content_js_1 = require("../db/entities/Content.js");
+const Media_js_1 = require("../db/entities/Media.js");
+const userdb_js_1 = require("../db/entities/userdb.js");
 const createUser = (payload) => {
     return dataSource_js_1.default.manager.transaction(async (transaction) => {
         try {
@@ -218,3 +220,116 @@ const incrementLikes = async (content) => {
     }
 };
 exports.incrementLikes = incrementLikes;
+const createMedia = async (payload) => {
+    try {
+        const newMedia = new Media_js_1.Media();
+        newMedia.name = payload.name;
+        newMedia.permissions = await Permission_js_1.Permission.findBy({
+            id: (0, typeorm_1.In)(payload.permissions)
+        });
+        await newMedia.save();
+    }
+    catch (error) {
+        throw ("Failed to create media: " + error);
+    }
+};
+exports.createMedia = createMedia;
+const getAllMedia = async () => {
+    try {
+        const media = await Media_js_1.Media.find();
+        return media;
+    }
+    catch (error) {
+        throw new Error("Something went wrong");
+    }
+};
+exports.getAllMedia = getAllMedia;
+const updateMedia = async (id, payload) => {
+    try {
+        const mediaToUpdate = await Media_js_1.Media.findOne({ where: { id: (id) } });
+        if (mediaToUpdate) {
+            Object.assign(mediaToUpdate, payload);
+            await mediaToUpdate.save();
+            return mediaToUpdate;
+        }
+        else {
+            throw ("Media not found");
+        }
+    }
+    catch (error) {
+        throw ("Failed to update media: " + error);
+    }
+};
+exports.updateMedia = updateMedia;
+const deleteMedia = async (id) => {
+    try {
+        const mediaToDelete = await Media_js_1.Media.findOne({ where: { id: (id) } });
+        if (mediaToDelete) {
+            await Media_js_1.Media.remove(mediaToDelete);
+        }
+        else {
+            throw ("Media not found");
+        }
+    }
+    catch (error) {
+        throw ("Failed to delete media: " + error);
+    }
+};
+exports.deleteMedia = deleteMedia;
+// Category functions
+const createCategory = async (payload) => {
+    try {
+        const newCategory = Category_js_1.Category.create(payload);
+        await newCategory.save();
+        return newCategory;
+    }
+    catch (error) {
+        throw ("Failed to create category: " + error);
+    }
+};
+exports.createCategory = createCategory;
+const getAllCategories = () => {
+    try {
+        return Category_js_1.Category.find();
+    }
+    catch (error) {
+        throw ("Something went wrong");
+    }
+};
+exports.getAllCategories = getAllCategories;
+const updateCategory = async (id, payload) => {
+    try {
+        const categoryToUpdate = await Category_js_1.Category.findOne({
+            where: { id: Number(id) }
+        });
+        if (categoryToUpdate) {
+            Object.assign(categoryToUpdate, payload);
+            await categoryToUpdate.save();
+            return categoryToUpdate;
+        }
+        else {
+            throw ("Category not found");
+        }
+    }
+    catch (error) {
+        throw ("Failed to update category: " + error);
+    }
+};
+exports.updateCategory = updateCategory;
+const deleteCategory = async (id) => {
+    try {
+        const categoryToDelete = await Category_js_1.Category.findOne({
+            where: { id: Number(id) }
+        });
+        if (categoryToDelete) {
+            await Category_js_1.Category.remove(categoryToDelete);
+        }
+        else {
+            throw ("Category not found");
+        }
+    }
+    catch (error) {
+        throw ("Failed to delete category: " + error);
+    }
+};
+exports.deleteCategory = deleteCategory;

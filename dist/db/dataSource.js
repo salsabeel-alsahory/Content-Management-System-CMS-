@@ -3,15 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const typeorm_1 = require("typeorm");
 const dotenv_1 = __importDefault(require("dotenv"));
-const userdb_1 = require("./entities/userdb");
+const typeorm_1 = require("typeorm");
+const Category_1 = require("./entities/Category");
+const Content_1 = require("./entities/Content");
+const Media_1 = require("./entities/Media");
+const Permission_1 = require("./entities/Permission");
 const Profile_1 = require("./entities/Profile");
 const Role_1 = require("./entities/Role");
-const Permission_1 = require("./entities/Permission");
-const Content_1 = require("./entities/Content");
 const Tag_1 = require("./entities/Tag");
-const Category_1 = require("./entities/Category");
+const userdb_1 = require("./entities/userdb");
 dotenv_1.default.config();
 const dataSource = new typeorm_1.DataSource({
     type: 'mysql',
@@ -27,6 +28,7 @@ const dataSource = new typeorm_1.DataSource({
         Permission_1.Permission,
         Content_1.Content,
         Tag_1.Tag,
+        Media_1.Media,
         Category_1.Category,
         Content_1.Video,
         Content_1.Article

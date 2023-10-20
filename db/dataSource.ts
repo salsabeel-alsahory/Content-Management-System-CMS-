@@ -1,12 +1,13 @@
+import dotenv from 'dotenv';
 import { DataSource } from "typeorm";
-import dotenv from 'dotenv'
-import { User } from "./entities/userdb";
+import { Category } from "./entities/Category";
+import { Article, Content, Video } from "./entities/Content";
+import { Media } from "./entities/Media";
+import { Permission } from "./entities/Permission";
 import { Profile } from "./entities/Profile";
 import { Role } from "./entities/Role";
-import { Permission } from "./entities/Permission";
-import { Article,  Content, Video } from "./entities/Content";
 import { Tag } from "./entities/Tag";
-import { Category } from "./entities/Category";
+import { User } from "./entities/userdb";
 
 dotenv.config()
 const dataSource = new DataSource({
@@ -23,6 +24,7 @@ const dataSource = new DataSource({
         Permission,
         Content,
         Tag,
+        Media,
         Category,
         Video,
         Article
