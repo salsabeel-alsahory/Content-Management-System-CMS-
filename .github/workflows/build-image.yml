@@ -27,10 +27,10 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ghcr.io/salsabeel-alsahory/content-management-system:${{ steps.image_version.outputs.gitsha }}
+      run: docker build . --file Dockerfile --tag ghcr.io/salsabeelalsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
 
     - name: Publish docker image
-      run: docker push ghcr.io/salsabeel-alsahory/content-management-system:${{ steps.image_version.outputs.gitsha }}
+      run: docker push ghcr.io/salsabeelalsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
 
     - name: configure docker host
       uses: khaledez/configure-docker-host@v1
