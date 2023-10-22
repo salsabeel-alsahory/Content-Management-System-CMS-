@@ -17,7 +17,7 @@ services:
     restart: always
 
   app:
-    image: ghcr.io/salsabeel-alsahory/Content-Management-System-CMS-:231cdbf
+    image: ghcr.io/salsabeel-alsahory/contentmanagementsystem-:231cdbf
     restart: always
     environment:
       - PORT=80
