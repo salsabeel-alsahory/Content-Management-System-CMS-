@@ -21,7 +21,12 @@ services:
       - in_docker
     container_name: express-docker
     build: .
-    
+    environment:
+      - PORT=3306
+      - DB_HOST="dbcms.crsb2fljtjso.us-east-1.rds.amazonaws.com"
+      - DB_USER=sqldbcms
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_NAME=cms
     ports:
       - "3000:80"
     depends_on:
