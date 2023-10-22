@@ -36,6 +36,17 @@ router.post("/login", loginValidationRules(), validate, (req:any, res:any) => {
   }
 })
 
+// Logout route
+router.get('/logout', (req, res, next) => {
+  // Clear cookies by setting maxAge to -1
+  res.cookie('fullName', '', { maxAge: -1 });
+  res.cookie('loginTime', '', { maxAge: -1 });
+  res.cookie('token', '', { maxAge: -1 });
+
+  res.send('Logout successful'); // Send a confirmation message
+});
+
+
 //router.get('/', authenticate, authorize('view_users'),(req, res, next) => {
 
 router.get('/', authenticate, (req, res, next) => {

@@ -38,6 +38,14 @@ router.post("/login", (0, validator_js_1.loginValidationRules)(), validator_js_1
         res.status(404).send("email and password are required");
     }
 });
+// Logout route
+router.get('/logout', (req, res, next) => {
+    // Clear cookies by setting maxAge to -1
+    res.cookie('fullName', '', { maxAge: -1 });
+    res.cookie('loginTime', '', { maxAge: -1 });
+    res.cookie('token', '', { maxAge: -1 });
+    res.send('Logout successful'); // Send a confirmation message
+});
 //router.get('/', authenticate, authorize('view_users'),(req, res, next) => {
 router.get('/', authMiddleware_js_1.authenticate, (req, res, next) => {
     (0, user_js_1.getAllUsers)().then(data => {
