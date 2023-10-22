@@ -14,7 +14,6 @@ jobs:
       packages: write
     steps:
     - uses: actions/checkout@v3
-    
     - name: Set image version (tag)
       id: image_version
       run: echo "gitsha=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
@@ -27,15 +26,15 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ghcr.io/salsabeelalsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
+      run: docker build . --file Dockerfile --tag ghcr.io/salsabeel-alsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
 
     - name: Publish docker image
-      run: docker push ghcr.io/salsabeelalsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
+      run: docker push ghcr.io/salsabeel-alsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
 
     - name: configure docker host
       uses: khaledez/configure-docker-host@v1
       with:
-        host: 54.157.233.100
+        host: 54.174.157.177
         user: github
         ssh-private-key: ${{ secrets.DEPLOYMENT_KEY }}
 
