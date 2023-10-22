@@ -1,8 +1,8 @@
 import express from 'express';
-import dataSource from './db/dataSource';
 import logger from 'morgan';
-import indexRouter from './routes/authRoutes.js'
-import usersRouter from './routes/contentRoutes.js'
+import dataSource from './db/dataSource';
+import indexRouter from './routes/authRoutes.js';
+import usersRouter from './routes/contentRoutes.js';
 
 const app = express();
 
@@ -17,6 +17,27 @@ app.post('/signup', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
+// const AWS = require('aws-sdk');
+
+// let s3 = new AWS.S3({
+//   region: 'us-east-1', // Uncomment and adjust as needed
+//   accessKeyId: process.env.ACCESSKEYID,
+//   secretAccessKey: process.env.SECRETACCESSKEY
+// });
+
+// s3.putObject({
+//   Bucket: 'suzans3',
+//   Key: 'my-txt-file.txt',
+//   Body: Buffer.from('This is my text file')
+// }, (error, data) => {
+//   if (error) {
+//     console.error("Error uploading to S3:", error);
+//   } else {
+//     console.log("Successfully uploaded to S3:", data.ETag);
+//   }
+// });
+
 
 dataSource.initialize().then(() => {
   console.log('Connected to DB!');

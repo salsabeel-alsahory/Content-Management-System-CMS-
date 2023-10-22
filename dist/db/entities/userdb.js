@@ -63,7 +63,7 @@ __decorate([
 __decorate([
     (0, typeorm_1.CreateDateColumn)({
         type: 'timestamp',
-        default: () => "CURRENT_TIMESTAMP()"
+        default: () => "CURRENT_TIMESTAMP(6)"
     }),
     __metadata("design:type", Date)
 ], User.prototype, "createdAt", void 0);
