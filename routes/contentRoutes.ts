@@ -4,7 +4,7 @@ import { Article, Content } from '../db/entities/Content.js';
 import { Permission } from '../db/entities/Permission.js';
 import { Role } from '../db/entities/Role.js';
 import { authenticate } from '../middleware/authMiddleware.js';
-import { authorize } from '../middleware/authorize.js';
+// import { authorize } from '../middleware/authorize.js';
 import { loginValidationRules, signupValidationRules, validate } from '../middleware/validator.js';
 const router = express.Router();
 
@@ -36,8 +36,9 @@ router.post("/login", loginValidationRules(), validate, (req:any, res:any) => {
   }
 })
 
+//router.get('/', authenticate, authorize('view_users'),(req, res, next) => {
 
-router.get('/', authenticate, authorize('view_users'),(req, res, next) => {
+router.get('/', authenticate, (req, res, next) => {
   getAllUsers().then(data => {
     res.status(200).send(data)
   }).catch(error => {
@@ -47,8 +48,9 @@ router.get('/', authenticate, authorize('view_users'),(req, res, next) => {
 
 /* POST permission. --------------------------------------------------------------------------------------------------*/
 
+//router.post('/permission',authorize('create_permission'), (req, res, next) => {
 
-router.post('/permission',authorize('create_permission'), (req, res, next) => {
+router.post('/permission', (req, res, next) => {
   try {
     createPermission(req.body)
     res.status(201).send("permission created successfully")
@@ -58,8 +60,9 @@ router.post('/permission',authorize('create_permission'), (req, res, next) => {
 });
 
 
+//router.get('/permission', authenticate, authorize('view_permissions'),function (req, res, next) {
 
-router.get('/permission', authenticate, authorize('view_permissions'),function (req, res, next) {
+router.get('/permission', authenticate, function (req, res, next) {
   getAllPermission().then(data => {
     res.status(200).send(data)
   }).catch(error => {
@@ -69,7 +72,9 @@ router.get('/permission', authenticate, authorize('view_permissions'),function (
 });
 
 // Define a route to update an existing permission
-router.put('/permissions/:permissionId', authenticate,authorize('update_permission'), async (req, res) => {
+//router.put('/permissions/:permissionId', authenticate,authorize('update_permission'), async (req, res) => {
+
+router.put('/permissions/:permissionId', authenticate, async (req, res) => {
   try {
     const permissionId = req.params.permissionId; // Get the permission ID from the URL
 
@@ -95,8 +100,9 @@ router.put('/permissions/:permissionId', authenticate,authorize('update_permissi
   }
 });
 
+//router.post('/role', authenticate, authorize('create_role'),(req, res, next) => {
 
-router.post('/role', authenticate, authorize('create_role'),(req, res, next) => {
+router.post('/role', authenticate, (req, res, next) => {
   createRole(req.body).then(data => {
     res.status(201).send(data)
   }).catch(error => {
@@ -104,8 +110,9 @@ router.post('/role', authenticate, authorize('create_role'),(req, res, next) => 
   })
 });
 
+//router.get('/roles', authenticate,  authorize('view_roles'),function (req, res, next) {
 
-router.get('/roles', authenticate,  authorize('view_roles'),function (req, res, next) {
+router.get('/roles', authenticate,function (req, res, next) {
   getAllRoles().then(data => {
     res.status(200).send(data)
   }).catch(error => {
@@ -115,7 +122,9 @@ router.get('/roles', authenticate,  authorize('view_roles'),function (req, res, 
 });
 
 // Update an existing role
-router.put('/roles/:roleId', authenticate,authorize('update_role'), async (req, res) => {
+//router.put('/roles/:roleId', authenticate,authorize('update_role'), async (req, res) => {
+
+router.put('/roles/:roleId', authenticate, async (req, res) => {
   try {
     const roleId = req.params.roleId; // This will take the ID from the URL
 
@@ -141,8 +150,9 @@ router.put('/roles/:roleId', authenticate,authorize('update_role'), async (req, 
   }
 });
 
+//router.get('/content', authenticate, authorize('view_content'),(req, res) => {
 
-router.get('/content', authenticate, authorize('view_content'),(req, res) => {
+router.get('/content', authenticate, (req, res) => {
   getAllContent()
     .then((data) => {
       res.status(200).send(data);
@@ -152,8 +162,9 @@ router.get('/content', authenticate, authorize('view_content'),(req, res) => {
       res.status(500).send('Something went wrong');
     });
 });
+//router.post('/content', authenticate,authorize('create_content'), (req, res) => {
 
-router.post('/content', authenticate,authorize('create_content'), (req, res) => {
+router.post('/content', authenticate, (req, res) => {
   createContent(req.body)
     .then((data) => {
       res.status(201).send(data);
@@ -163,8 +174,9 @@ router.post('/content', authenticate,authorize('create_content'), (req, res) => 
       res.status(500).send('Something went wrong');
     });
 });
+//router.put('/content/:contentId', authenticate,authorize('update_content'), async (req, res) => {
 
-router.put('/content/:contentId', authenticate,authorize('update_content'), async (req, res) => {
+router.put('/content/:contentId', authenticate, async (req, res) => {
   try {
     const contentId = +req.params.contentId; // Convert the contentId to a number
 
@@ -196,7 +208,9 @@ router.put('/content/:contentId', authenticate,authorize('update_content'), asyn
 });
 
 // Define a route to search for content
-router.get('/content/search', authenticate,authorize('search_content'), async (req, res) => {
+//router.get('/content/search', authenticate,authorize('search_content'), async (req, res) => {
+
+router.get('/content/search', authenticate, async (req, res) => {
   try {
     // Get search criteria from the query parameters
     const { title, contentType } = req.query;
@@ -224,8 +238,9 @@ router.get('/content/search', authenticate,authorize('search_content'), async (r
 
 
 //-----------------------------------------------------------------
+//router.post('/article/create', authenticate,authorize('create_article'),async (req, res) => {
 
-router.post('/article/create', authenticate,authorize('create_article'),async (req, res) => {
+router.post('/article/create', authenticate,async (req, res) => {
   try {
     const articleData = req.body; // Assuming the article data is in the request body
     const article = await createArticle(articleData);
@@ -276,8 +291,9 @@ router.get('/videos', async (req, res) => {
 //   }
 // });
 
+//router.get('/articles', authenticate,authorize('view_articles'), async (req, res) => {
 
-router.get('/articles', authenticate,authorize('view_articles'), async (req, res) => {
+router.get('/articles', authenticate, async (req, res) => {
   try {
     const articles = await getAllArticles(); // Define a function like getAllArticles to fetch all article entries
     res.status(200).json(articles);
@@ -346,8 +362,9 @@ router.put('/articles/:articleId', authenticate, async (req, res) => {
 // });
 
 
+//router.get('/media', authenticate, authorize('get_media'),async(req, res) => {
 
-router.get('/media', authenticate, authorize('get_media'),async(req, res) => {
+router.get('/media', authenticate, async(req, res) => {
   getAllMedia()
     .then((data: any) => {
       res.status(200).send(data);
@@ -358,8 +375,9 @@ router.get('/media', authenticate, authorize('get_media'),async(req, res) => {
     });
 });
 
+//router.post('/media', authenticate, authorize('add_media'),async(req, res) => {
 
-router.post('/media', authenticate, authorize('add_media'),async(req, res) => {
+router.post('/media', authenticate, async(req, res) => {
   createMedia(req.body)
     .then((data: any) => {
       res.status(201).send(data);
@@ -369,8 +387,9 @@ router.post('/media', authenticate, authorize('add_media'),async(req, res) => {
       res.status(500).send('Something went wrong');
     });
 });
+//router.put('/media/:id', authenticate,authorize('update_media'),async (req, res) => {
 
-router.put('/media/:id', authenticate,authorize('update_media'),async (req, res) => {
+router.put('/media/:id', authenticate,async (req, res) => {
   updateMedia(req.params.id, req.body)
     .then((data: any) => {
       res.status(200).send(data);
@@ -380,8 +399,9 @@ router.put('/media/:id', authenticate,authorize('update_media'),async (req, res)
       res.status(500).send('Something went wrong');
     });
 });
+//router.delete('/media/:id', authenticate,authorize('delete_media'),async (req, res) => {
 
-router.delete('/media/:id', authenticate,authorize('delete_media'),async (req, res) => {
+router.delete('/media/:id', authenticate,async (req, res) => {
   deleteMedia(req.params.id)
     .then(() => {
       res.status(200).send('Media deleted successfully');
@@ -393,7 +413,9 @@ router.delete('/media/:id', authenticate,authorize('delete_media'),async (req, r
 });
 
 // Category routes
-router.get('/categories', authenticate,authorize('get_category'),async (req, res) => {
+//router.get('/categories', authenticate,authorize('get_category'),async (req, res) => {
+
+router.get('/categories', authenticate,async (req, res) => {
   getAllCategories()
     .then((data: any) => {
       res.status(200).send(data);
@@ -403,8 +425,9 @@ router.get('/categories', authenticate,authorize('get_category'),async (req, res
       res.status(500).send('Something went wrong');
     });
 });
+//router.post('/categories', authenticate,authorize('add_category'),async  (req, res) => {
 
-router.post('/categories', authenticate,authorize('add_category'),async  (req, res) => {
+router.post('/categories', authenticate,async  (req, res) => {
   createCategory(req.body)
     .then((data: any) => {
       res.status(201).send(data);
@@ -414,8 +437,9 @@ router.post('/categories', authenticate,authorize('add_category'),async  (req, r
       res.status(500).send('Something went wrong');
     });
 });
+//router.put('/categories/:id', authenticate,authorize('update_category'),async  (req, res) => {
 
-router.put('/categories/:id', authenticate,authorize('update_category'),async  (req, res) => {
+router.put('/categories/:id', authenticate,async  (req, res) => {
   updateCategory(req.params.id, req.body)
     .then((data: any) => {
       res.status(200).send(data);
@@ -425,8 +449,9 @@ router.put('/categories/:id', authenticate,authorize('update_category'),async  (
       res.status(500).send('Something went wrong');
     });
 });
+//router.delete('/categories/:id', authenticate,authorize('delete_category'),async  (req, res) => {
 
-router.delete('/categories/:id', authenticate,authorize('delete_category'),async  (req, res) => {
+router.delete('/categories/:id', authenticate,async  (req, res) => {
   deleteCategory(req.params.id)
     .then(() => {
       res.status(200).send('Category deleted successfully');
