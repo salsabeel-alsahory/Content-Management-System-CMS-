@@ -11,6 +11,9 @@ const Role_js_1 = require("../db/entities/Role.js");
 const authMiddleware_js_1 = require("../middleware/authMiddleware.js");
 // import { authorize } from '../middleware/authorize.js';
 const validator_js_1 = require("../middleware/validator.js");
+const permission_js_1 = require("../controllers/permission.js");
+const category_js_1 = require("../controllers/category.js");
+const content_js_1 = require("../controllers/content.js");
 const router = express_1.default.Router();
 router.post("/signup", (0, validator_js_1.signupValidationRules)(), validator_js_1.validate, async (req, res) => {
     try {
@@ -38,14 +41,6 @@ router.post("/login", (0, validator_js_1.loginValidationRules)(), validator_js_1
         res.status(404).send("email and password are required");
     }
 });
-// Logout route
-router.get('/logout', (req, res, next) => {
-    // Clear cookies by setting maxAge to -1
-    res.cookie('fullName', '', { maxAge: -1 });
-    res.cookie('loginTime', '', { maxAge: -1 });
-    res.cookie('token', '', { maxAge: -1 });
-    res.send('Logout successful'); // Send a confirmation message
-});
 //router.get('/', authenticate, authorize('view_users'),(req, res, next) => {
 router.get('/', authMiddleware_js_1.authenticate, (req, res, next) => {
     (0, user_js_1.getAllUsers)().then(data => {
@@ -58,7 +53,7 @@ router.get('/', authMiddleware_js_1.authenticate, (req, res, next) => {
 //router.post('/permission',authorize('create_permission'), (req, res, next) => {
 router.post('/permission', (req, res, next) => {
     try {
-        (0, user_js_1.createPermission)(req.body);
+        (0, permission_js_1.createPermission)(req.body);
         res.status(201).send("permission created successfully");
     }
     catch (error) {
@@ -67,7 +62,7 @@ router.post('/permission', (req, res, next) => {
 });
 //router.get('/permission', authenticate, authorize('view_permissions'),function (req, res, next) {
 router.get('/permission', authMiddleware_js_1.authenticate, function (req, res, next) {
-    (0, user_js_1.getAllPermission)().then(data => {
+    (0, permission_js_1.getAllPermission)().then(data => {
         res.status(200).send(data);
     }).catch(error => {
         console.log(error);
@@ -98,20 +93,28 @@ router.put('/permissions/:permissionId', authMiddleware_js_1.authenticate, async
     }
 });
 //router.post('/role', authenticate, authorize('create_role'),(req, res, next) => {
+// router.post('/role', authenticate, (req, res, next) => {
+//   createRole(req.body).then(data => {
+//     res.status(201).send(data)
+//   }).catch(error => {
+//     res.status(500).send("something went wrong")
+//   })
+// });
 router.post('/role', authMiddleware_js_1.authenticate, (req, res, next) => {
-    (0, user_js_1.createRole)(req.body).then(data => {
+    (0, permission_js_1.createRole)(req.body).then((data) => {
         res.status(201).send(data);
-    }).catch(error => {
-        res.status(500).send("something went wrong");
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 //router.get('/roles', authenticate,  authorize('view_roles'),function (req, res, next) {
 router.get('/roles', authMiddleware_js_1.authenticate, function (req, res, next) {
     (0, user_js_1.getAllRoles)().then(data => {
         res.status(200).send(data);
-    }).catch(error => {
-        console.log(error);
-        res.status(500).send("something went wrong");
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 // Update an existing role
@@ -139,24 +142,24 @@ router.put('/roles/:roleId', authMiddleware_js_1.authenticate, async (req, res) 
 });
 //router.get('/content', authenticate, authorize('view_content'),(req, res) => {
 router.get('/content', authMiddleware_js_1.authenticate, (req, res) => {
-    (0, user_js_1.getAllContent)()
+    (0, content_js_1.getAllContent)()
         .then((data) => {
         res.status(200).send(data);
     })
-        .catch((error) => {
-        console.error(error);
-        res.status(500).send('Something went wrong');
+        .catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 //router.post('/content', authenticate,authorize('create_content'), (req, res) => {
 router.post('/content', authMiddleware_js_1.authenticate, (req, res) => {
-    (0, user_js_1.createContent)(req.body)
+    (0, content_js_1.createContent)(req.body)
         .then((data) => {
         res.status(201).send(data);
     })
-        .catch((error) => {
-        console.error(error);
-        res.status(500).send('Something went wrong');
+        .catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 //router.put('/content/:contentId', authenticate,authorize('update_content'), async (req, res) => {
@@ -213,7 +216,7 @@ router.get('/content/search', authMiddleware_js_1.authenticate, async (req, res)
 router.post('/article/create', authMiddleware_js_1.authenticate, async (req, res) => {
     try {
         const articleData = req.body; // Assuming the article data is in the request body
-        const article = await (0, user_js_1.createArticle)(articleData);
+        const article = await (0, content_js_1.createArticle)(articleData);
         res.status(201).json(article);
     }
     catch (error) {
@@ -224,7 +227,7 @@ router.post('/article/create', authMiddleware_js_1.authenticate, async (req, res
 router.post('/videos', async (req, res) => {
     try {
         const videoData = req.body; // Assuming the video data is in the request body
-        const video = await (0, user_js_1.createVideo)(videoData);
+        const video = await (0, content_js_1.createVideo)(videoData);
         res.status(201).json(video);
     }
     catch (error) {
@@ -234,7 +237,7 @@ router.post('/videos', async (req, res) => {
 });
 router.get('/videos', async (req, res) => {
     try {
-        const videos = await (0, user_js_1.getAllVideos)(); // Define a function like getAllVideos to fetch all video entries
+        const videos = await (0, content_js_1.getAllVideos)(); // Define a function like getAllVideos to fetch all video entries
         res.status(200).json(videos);
     }
     catch (error) {
@@ -264,7 +267,7 @@ router.get('/videos', async (req, res) => {
 //router.get('/articles', authenticate,authorize('view_articles'), async (req, res) => {
 router.get('/articles', authMiddleware_js_1.authenticate, async (req, res) => {
     try {
-        const articles = await (0, user_js_1.getAllArticles)(); // Define a function like getAllArticles to fetch all article entries
+        const articles = await (0, content_js_1.getAllArticles)(); // Define a function like getAllArticles to fetch all article entries
         res.status(200).json(articles);
     }
     catch (error) {
@@ -320,63 +323,63 @@ router.put('/articles/:articleId', authMiddleware_js_1.authenticate, async (req,
 // });
 //router.get('/media', authenticate, authorize('get_media'),async(req, res) => {
 router.get('/media', authMiddleware_js_1.authenticate, async (req, res) => {
-    (0, user_js_1.getAllMedia)()
+    (0, content_js_1.getAllMedia)()
         .then((data) => {
         res.status(200).send(data);
     })
-        .catch((error) => {
-        console.error(error);
-        res.status(500).send('Something went wrong');
+        .catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 //router.post('/media', authenticate, authorize('add_media'),async(req, res) => {
 router.post('/media', authMiddleware_js_1.authenticate, async (req, res) => {
-    (0, user_js_1.createMedia)(req.body)
+    (0, permission_js_1.createMedia)(req.body)
         .then((data) => {
         res.status(201).send(data);
     })
-        .catch((error) => {
-        console.error(error);
-        res.status(500).send('Something went wrong');
+        .catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 //router.put('/media/:id', authenticate,authorize('update_media'),async (req, res) => {
 router.put('/media/:id', authMiddleware_js_1.authenticate, async (req, res) => {
-    (0, user_js_1.updateMedia)(req.params.id, req.body)
+    (0, content_js_1.updateMedia)(req.params.id, req.body)
         .then((data) => {
         res.status(200).send(data);
     })
-        .catch((error) => {
-        console.error(error);
-        res.status(500).send('Something went wrong');
+        .catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 //router.delete('/media/:id', authenticate,authorize('delete_media'),async (req, res) => {
 router.delete('/media/:id', authMiddleware_js_1.authenticate, async (req, res) => {
-    (0, user_js_1.deleteMedia)(req.params.id)
+    (0, content_js_1.deleteMedia)(req.params.id)
         .then(() => {
         res.status(200).send('Media deleted successfully');
     })
-        .catch((error) => {
-        console.error(error);
-        res.status(500).send('Something went wrong');
+        .catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 // Category routes
 //router.get('/categories', authenticate,authorize('get_category'),async (req, res) => {
 router.get('/categories', authMiddleware_js_1.authenticate, async (req, res) => {
-    (0, user_js_1.getAllCategories)()
+    (0, category_js_1.getAllCategories)()
         .then((data) => {
         res.status(200).send(data);
     })
-        .catch((error) => {
-        console.error(error);
-        res.status(500).send('Something went wrong');
+        .catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 //router.post('/categories', authenticate,authorize('add_category'),async  (req, res) => {
 router.post('/categories', authMiddleware_js_1.authenticate, async (req, res) => {
-    (0, user_js_1.createCategory)(req.body)
+    (0, category_js_1.createCategory)(req.body)
         .then((data) => {
         res.status(201).send(data);
     })
@@ -387,24 +390,24 @@ router.post('/categories', authMiddleware_js_1.authenticate, async (req, res) =>
 });
 //router.put('/categories/:id', authenticate,authorize('update_category'),async  (req, res) => {
 router.put('/categories/:id', authMiddleware_js_1.authenticate, async (req, res) => {
-    (0, user_js_1.updateCategory)(req.params.id, req.body)
+    (0, category_js_1.updateCategory)(req.params.id, req.body)
         .then((data) => {
         res.status(200).send(data);
     })
-        .catch((error) => {
-        console.error(error);
-        res.status(500).send('Something went wrong');
+        .catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 //router.delete('/categories/:id', authenticate,authorize('delete_category'),async  (req, res) => {
 router.delete('/categories/:id', authMiddleware_js_1.authenticate, async (req, res) => {
-    (0, user_js_1.deleteCategory)(req.params.id)
+    (0, category_js_1.deleteCategory)(req.params.id)
         .then(() => {
         res.status(200).send('Category deleted successfully');
     })
-        .catch((error) => {
-        console.error(error);
-        res.status(500).send('Something went wrong');
+        .catch(err => {
+        console.error(err);
+        res.status(500).send(err);
     });
 });
 exports.default = router;

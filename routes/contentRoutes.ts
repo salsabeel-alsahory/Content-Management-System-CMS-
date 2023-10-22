@@ -1,11 +1,14 @@
 import express from 'express';
-import { createArticle, createCategory, createContent, createMedia, createPermission, createRole, createUser, createVideo, deleteCategory, deleteMedia, getAllArticles, getAllCategories, getAllContent, getAllMedia, getAllPermission, getAllRoles, getAllUsers, getAllVideos, login, updateCategory, updateMedia } from '../controllers/user.js';
+import {  createUser,  getAllRoles, getAllUsers,  login,   } from '../controllers/user.js';
 import { Article, Content } from '../db/entities/Content.js';
 import { Permission } from '../db/entities/Permission.js';
 import { Role } from '../db/entities/Role.js';
 import { authenticate } from '../middleware/authMiddleware.js';
 // import { authorize } from '../middleware/authorize.js';
 import { loginValidationRules, signupValidationRules, validate } from '../middleware/validator.js';
+import { createMedia, createPermission, createRole, getAllPermission } from '../controllers/permission.js';
+import { createCategory, deleteCategory, getAllCategories, updateCategory } from '../controllers/category.js';
+import { createArticle, createContent, createVideo, deleteMedia, getAllArticles, getAllContent, getAllMedia, getAllVideos, updateMedia } from '../controllers/content.js';
 const router = express.Router();
 
 router.post("/signup", signupValidationRules(), validate, async (req:any, res:any) => {
@@ -36,15 +39,7 @@ router.post("/login", loginValidationRules(), validate, (req:any, res:any) => {
   }
 })
 
-// Logout route
-router.get('/logout', (req, res, next) => {
-  // Clear cookies by setting maxAge to -1
-  res.cookie('fullName', '', { maxAge: -1 });
-  res.cookie('loginTime', '', { maxAge: -1 });
-  res.cookie('token', '', { maxAge: -1 });
 
-  res.send('Logout successful'); // Send a confirmation message
-});
 
 
 //router.get('/', authenticate, authorize('view_users'),(req, res, next) => {
@@ -113,23 +108,31 @@ router.put('/permissions/:permissionId', authenticate, async (req, res) => {
 
 //router.post('/role', authenticate, authorize('create_role'),(req, res, next) => {
 
-router.post('/role', authenticate, (req, res, next) => {
-  createRole(req.body).then(data => {
-    res.status(201).send(data)
-  }).catch(error => {
-    res.status(500).send("something went wrong")
-  })
-});
+// router.post('/role', authenticate, (req, res, next) => {
+//   createRole(req.body).then(data => {
+//     res.status(201).send(data)
+//   }).catch(error => {
+//     res.status(500).send("something went wrong")
+//   })
+// });
 
+router.post('/role', authenticate, (req, res, next) => {
+  createRole(req.body).then((data) => {
+    res.status(201).send(data)
+  }).catch(err => {
+    console.error(err);
+    res.status(500).send(err);
+  });
+});
 //router.get('/roles', authenticate,  authorize('view_roles'),function (req, res, next) {
 
 router.get('/roles', authenticate,function (req, res, next) {
   getAllRoles().then(data => {
     res.status(200).send(data)
-  }).catch(error => {
-    console.log(error);
-    res.status(500).send("something went wrong")
-  })
+  }).catch(err => {
+    console.error(err);
+    res.status(500).send(err);
+  });
 });
 
 // Update an existing role
@@ -168,9 +171,9 @@ router.get('/content', authenticate, (req, res) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send('Something went wrong');
+    .catch(err => {
+      console.error(err);
+      res.status(500).send(err);
     });
 });
 //router.post('/content', authenticate,authorize('create_content'), (req, res) => {
@@ -180,9 +183,9 @@ router.post('/content', authenticate, (req, res) => {
     .then((data) => {
       res.status(201).send(data);
     })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send('Something went wrong');
+    .catch(err => {
+      console.error(err);
+      res.status(500).send(err);
     });
 });
 //router.put('/content/:contentId', authenticate,authorize('update_content'), async (req, res) => {
@@ -380,9 +383,9 @@ router.get('/media', authenticate, async(req, res) => {
     .then((data: any) => {
       res.status(200).send(data);
     })
-    .catch((error: any) => {
-      console.error(error);
-      res.status(500).send('Something went wrong');
+    .catch(err => {
+      console.error(err);
+      res.status(500).send(err);
     });
 });
 
@@ -393,9 +396,9 @@ router.post('/media', authenticate, async(req, res) => {
     .then((data: any) => {
       res.status(201).send(data);
     })
-    .catch((error: any) => {
-      console.error(error);
-      res.status(500).send('Something went wrong');
+    .catch(err => {
+      console.error(err);
+      res.status(500).send(err);
     });
 });
 //router.put('/media/:id', authenticate,authorize('update_media'),async (req, res) => {
@@ -405,9 +408,9 @@ router.put('/media/:id', authenticate,async (req, res) => {
     .then((data: any) => {
       res.status(200).send(data);
     })
-    .catch((error: any) => {
-      console.error(error);
-      res.status(500).send('Something went wrong');
+    .catch(err => {
+      console.error(err);
+      res.status(500).send(err);
     });
 });
 //router.delete('/media/:id', authenticate,authorize('delete_media'),async (req, res) => {
@@ -417,9 +420,9 @@ router.delete('/media/:id', authenticate,async (req, res) => {
     .then(() => {
       res.status(200).send('Media deleted successfully');
     })
-    .catch((error: any) => {
-      console.error(error);
-      res.status(500).send('Something went wrong');
+    .catch(err => {
+      console.error(err);
+      res.status(500).send(err);
     });
 });
 
@@ -431,9 +434,9 @@ router.get('/categories', authenticate,async (req, res) => {
     .then((data: any) => {
       res.status(200).send(data);
     })
-    .catch((error: any) => {
-      console.error(error);
-      res.status(500).send('Something went wrong');
+    .catch(err => {
+      console.error(err);
+      res.status(500).send(err);
     });
 });
 //router.post('/categories', authenticate,authorize('add_category'),async  (req, res) => {
@@ -455,9 +458,9 @@ router.put('/categories/:id', authenticate,async  (req, res) => {
     .then((data: any) => {
       res.status(200).send(data);
     })
-    .catch((error: any) => {
-      console.error(error);
-      res.status(500).send('Something went wrong');
+    .catch(err => {
+      console.error(err);
+      res.status(500).send(err);
     });
 });
 //router.delete('/categories/:id', authenticate,authorize('delete_category'),async  (req, res) => {
@@ -467,9 +470,9 @@ router.delete('/categories/:id', authenticate,async  (req, res) => {
     .then(() => {
       res.status(200).send('Category deleted successfully');
     })
-    .catch((error: any) => {
-      console.error(error);
-      res.status(500).send('Something went wrong');
+    .catch(err => {
+      console.error(err);
+      res.status(500).send(err);
     });
 });
 export default router;
