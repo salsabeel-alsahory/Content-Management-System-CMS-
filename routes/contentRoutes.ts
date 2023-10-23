@@ -1,7 +1,6 @@
 import express from 'express';
 import {  createUser,  getAllRoles, getAllUsers,  login,   } from '../controllers/user.js';
 import { Article, Content } from '../db/entities/Content.js';
-import { Permission } from '../db/entities/Permission.js';
 import { Role } from '../db/entities/Role.js';
 import { authenticate } from '../middleware/authMiddleware.js';
 // import { authorize } from '../middleware/authorize.js';
@@ -9,6 +8,7 @@ import { loginValidationRules, signupValidationRules, validate } from '../middle
 import { createMedia, createPermission, createRole, getAllPermission } from '../controllers/permission.js';
 import { createCategory, deleteCategory, getAllCategories, updateCategory } from '../controllers/category.js';
 import { createArticle, createContent, createVideo, deleteMedia, getAllArticles, getAllContent, getAllMedia, getAllVideos, updateMedia } from '../controllers/content.js';
+import { Permission } from '../db/entities/Permission.js';
 const router = express.Router();
 
 router.post("/signup", signupValidationRules(), validate, async (req:any, res:any) => {

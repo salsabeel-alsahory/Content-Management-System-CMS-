@@ -6,9 +6,7 @@ import dataSource from "../db/dataSource.js";
 import { Role } from "../db/entities/Role.js";
 
 import { UserNS } from "../@types/user.js";
-import { Media } from "../db/entities/Media.js";
 import { User } from "../db/entities/userdb.js";
-import { QueryFailedError } from 'typeorm';
 
 const createUser = (payload: UserNS.User) => {
     return dataSource.manager.transaction(async transaction => {

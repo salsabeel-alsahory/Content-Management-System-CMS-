@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const user_js_1 = require("../controllers/user.js");
 const Content_js_1 = require("../db/entities/Content.js");
-const Permission_js_1 = require("../db/entities/Permission.js");
 const Role_js_1 = require("../db/entities/Role.js");
 const authMiddleware_js_1 = require("../middleware/authMiddleware.js");
 // import { authorize } from '../middleware/authorize.js';
@@ -14,6 +13,7 @@ const validator_js_1 = require("../middleware/validator.js");
 const permission_js_1 = require("../controllers/permission.js");
 const category_js_1 = require("../controllers/category.js");
 const content_js_1 = require("../controllers/content.js");
+const Permission_js_1 = require("../db/entities/Permission.js");
 const router = express_1.default.Router();
 router.post("/signup", (0, validator_js_1.signupValidationRules)(), validator_js_1.validate, async (req, res) => {
     try {

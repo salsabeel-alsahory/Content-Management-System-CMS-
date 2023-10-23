@@ -1,7 +1,7 @@
 import { Media } from "../db/entities/Media";
 import { Permission } from "../db/entities/Permission";
 import { Role } from "../db/entities/Role";
-import { In, QueryFailedError } from "typeorm";
+import { In } from "typeorm";
 const createPermission = async (payload: Permission) => {
     try {
         const permission = Permission.create(payload);
