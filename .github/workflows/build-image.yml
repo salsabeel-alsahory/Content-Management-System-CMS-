@@ -36,6 +36,10 @@ jobs:
         host: 3.80.223.105
         user: github
         ssh-private-key: ${{ secrets.DEPLOYMENT_KEY }}
+    - name: validate
+      run: |
+        cat ~/.ssh/config
+        ls -al ~/.ssh
     - name: deploy
       run: docker-compose -f docker-compose-prod.yml up -d
       env:
