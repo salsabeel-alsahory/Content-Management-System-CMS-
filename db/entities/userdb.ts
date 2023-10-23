@@ -1,4 +1,4 @@
-import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import bcrypt from 'bcrypt';
 import { Role } from "./Role.js";
 import { Profile } from "./Profile.js";
@@ -33,9 +33,17 @@ export class User extends BaseEntity {
     @OneToOne(() => Profile, profile => profile.user, { eager: true })
     profile: Partial<Profile>;
 
+ 
     @CreateDateColumn({
         type: 'timestamp',
         default: () => "CURRENT_TIMESTAMP(6)"
     })
     createdAt: Date;
-}
+    
+      @UpdateDateColumn({
+    
+        type: 'timestamp',
+        default: () => "CURRENT_TIMESTAMP(6)"
+      })
+      updatedAt: Date;
+    }
