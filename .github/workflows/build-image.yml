@@ -31,7 +31,7 @@ jobs:
     - name: Publish docker image
       run: docker push ghcr.io/salsabeel-alsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
     - name: configure docker host
-      uses: khaledez/configure-docker-host@v1.1
+      uses: khaledez/configure-docker-host@v2
       with:
         host: 3.80.223.105
         user: github
