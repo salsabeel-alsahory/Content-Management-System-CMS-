@@ -2,16 +2,24 @@ import AWS from 'aws-sdk';
 import express from 'express';
 import logger from 'morgan';
 import dataSource from './db/dataSource';
-import indexRouter from './routes/authRoutes.js';
-import usersRouter from './routes/contentRoutes.js';
+import contentRouter from './routes/contentRoutes.js';
+import userRouter from './routes/user.js'
+import permissionRouter from './routes/permission.js';
+import roleRouter from './routes/role.js';
+import mediaRouter from './routes/media.js';
+import categoryRouter from './routes/category'
+
 
 const app = express();
 
 app.use(express.json());
 app.use(logger('dev'));
-app.use('/', indexRouter);
-app.use('/user', usersRouter);
-
+app.use('/content', contentRouter);
+app.use('/user', userRouter);
+app.use('/permission', permissionRouter);
+app.use('/role', roleRouter);
+app.use('/media', mediaRouter);
+app.use('/category', categoryRouter);
 const s3 = new AWS.S3({
   region: 'us-east-1',
   accessKeyId: process.env.ACCESSKEYID,
