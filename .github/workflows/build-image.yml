@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [ "main" ]
   
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,6 +15,7 @@ jobs:
       packages: write
     steps:
     - uses: actions/checkout@v3
+
     - name: Set image version (tag)
       id: image_version
       run: echo "gitsha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
@@ -24,25 +26,21 @@ jobs:
         registry: ghcr.io
         username: salsabeel-alsahory
         password: ${{ secrets.GITHUB_TOKEN }}
-
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag ghcr.io/salsabeel-alsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
-
     - name: Publish docker image
       run: docker push ghcr.io/salsabeel-alsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
-
     - name: configure docker host
       uses: khaledez/configure-docker-host@v1
       with:
         host: 3.80.223.105
         user: github
         ssh-private-key: ${{ secrets.DEPLOYMENT_KEY }}
-
     - name: deploy
       run: docker-compose -f docker-compose-prod.yml up -d
       env:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
+        GIT_VERSION: ${{ steps.image_version.outputs.gitsha }}
     - name: print logs
       if: always() # This step will be executed even if previous steps fails
       run: docker-compose logs
