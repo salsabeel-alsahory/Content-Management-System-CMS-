@@ -58,5 +58,26 @@ router.post('/permission', (req, res, next) => {
       res.status(500).json({ error: 'Failed to update permission' });
     }
   });
-
+// Delete an existing permission by ID
+router.delete('/permissions/:permissionId', authenticate, async (req, res) => {
+    try {
+      const permissionId = req.params.permissionId; // Get the permission ID from the URL
+  
+      // Find the permission by its ID in the database
+      const permission = await Permission.findOne({ where: { id: permissionId } });
+  
+      if (!permission) {
+        return res.status(404).json({ error: 'Permission not found' });
+      }
+  
+      // Delete the permission from the database
+      await permission.remove();
+  
+      res.status(200).json({ message: 'Permission deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting permission:', error);
+      res.status(500).json({ error: 'Failed to delete permission' });
+    }
+  });
+  
   export default router;
