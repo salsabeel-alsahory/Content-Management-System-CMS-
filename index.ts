@@ -20,6 +20,7 @@ app.use('/permission', permissionRouter);
 app.use('/role', roleRouter);
 app.use('/media', mediaRouter);
 app.use('/category', categoryRouter);
+
 const s3 = new AWS.S3({
   region: 'us-east-1',
   accessKeyId: process.env.ACCESSKEYID,

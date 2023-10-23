@@ -22,4 +22,5 @@ export class Role extends BaseEntity {
     @ManyToMany(() => Permission, { cascade: true, eager: true })
     @JoinTable()
     permissions: Permission[];
+    
 }
