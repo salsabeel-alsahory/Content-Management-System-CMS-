@@ -20,7 +20,7 @@ router.get('/categories', authenticate,async (req, res) => {
   });
   //router.post('/categories', authenticate,authorize('add_category'),async  (req, res) => {
   
-  router.post('/categories', authenticate,async  (req, res) => {
+  router.post('/category', authenticate,async  (req, res) => {
     createCategory(req.body)
       .then((data: any) => {
         res.status(201).send(data);
@@ -32,7 +32,7 @@ router.get('/categories', authenticate,async (req, res) => {
   });
   //router.put('/categories/:id', authenticate,authorize('update_category'),async  (req, res) => {
   
-  router.put('/categories/:id', authenticate,async  (req, res) => {
+  router.put('/category/:id', authenticate,async  (req, res) => {
     updateCategory(req.params.id, req.body)
       .then((data: any) => {
         res.status(200).send(data);
@@ -43,8 +43,7 @@ router.get('/categories', authenticate,async (req, res) => {
       });
   });
   //router.delete('/categories/:id', authenticate,authorize('delete_category'),async  (req, res) => {
-  
-  router.delete('/categories/:id', authenticate,async  (req, res) => {
+  router.delete('/category/:id', authenticate,async  (req, res) => {
     deleteCategory(req.params.id)
       .then(() => {
         res.status(200).send('Category deleted successfully');
