@@ -33,12 +33,18 @@ const createVideo = async (payload: Video) => {
         await video.save();
         console.log("here is worke ");
         return video; // Return the newly created video
-    } catch (error) {
+      } catch (error) {
+        console.error('Error creating video:', error);
         if (error instanceof QueryFailedError) {
-            // Handle database query errors (e.g., unique constraint violations)
-            throw 'Database error: ' + error.toString();
+            return {
+                status: 400,
+                message: 'Database error: ' + error.toString()
+            };
         } else {
-            throw 'Failed to create video: ' + (error as Error).toString();
+            return {
+                status: 500,
+                message: 'Failed to create video: ' + (error as Error).toString()
+            };
         }
     }
 };

@@ -82,7 +82,7 @@ router.get('/content/search', authMiddleware_js_1.authenticate, async (req, res)
 });
 //-----------------------------------------------------------------
 //router.post('/article/create', authenticate,authorize('create_article'),async (req, res) => {
-router.post('/article/create', authMiddleware_js_1.authenticate, async (req, res) => {
+router.post('/create', authMiddleware_js_1.authenticate, async (req, res) => {
     try {
         const articleData = req.body; // Assuming the article data is in the request body
         const article = await (0, content_js_1.createArticle)(articleData);

@@ -99,7 +99,7 @@ router.get('/content/search', authenticate, async (req, res) => {
 //-----------------------------------------------------------------
 //router.post('/article/create', authenticate,authorize('create_article'),async (req, res) => {
 
-router.post('/article/create', authenticate,async (req, res) => {
+router.post('/create', authenticate,async (req, res) => {
   try {
     const articleData = req.body; // Assuming the article data is in the request body
     const article = await createArticle(articleData);
