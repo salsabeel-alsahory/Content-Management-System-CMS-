@@ -47,11 +47,9 @@ export class Media extends BaseEntity {
 createdAt: Date;
 
   @UpdateDateColumn({
-
     type: 'timestamp',
     default: () => "CURRENT_TIMESTAMP(6)"
   })
   updatedAt: Date;
-
 
 }

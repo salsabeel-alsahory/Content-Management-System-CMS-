@@ -142,8 +142,7 @@ router.get('/articles', authenticate, async (req, res) => {
 router.put('/articles/:articleId', authenticate, async (req, res) => {
   try {
     const articleId = +req.params.articleId; // Convert the articleId to a number
-
-    // Check if articleId is a valid number
+ // Check if articleId is a valid number
     if (isNaN(articleId)) {
       return res.status(400).json({ error: 'Invalid articleId' });
     }
@@ -170,32 +169,33 @@ router.put('/articles/:articleId', authenticate, async (req, res) => {
   }
 });
 
+router.post('/content/like/:contentId', authenticate, async (req, res) => {
+  try {
+    const contentId = +req.params.contentId; // Convert the contentId to a number
 
-// router.post('/content/like/:contentId', authenticate, async (req, res) => {
-//   try {
-//     const contentId = +req.params.contentId; // Convert the contentId to a number
+    // Check if contentId is a valid number
+    if (isNaN(contentId)) {
+      return res.status(400).json({ error: 'Invalid contentId' });
+    }
 
-//     // Check if contentId is a valid number
-//     if (isNaN(contentId)) {
-//       return res.status(400).json({ error: 'Invalid contentId' });
-//     }
+    // Find the content by its ID in the database
+    const content = await Content.findOne({ where: { id: contentId } });
 
-//     // Find the content by its ID in the database
-//     const content = await Content.findOne({ where: { id: contentId } });
+    if (!content) {
+      return res.status(404).json({ error: 'Content not found' });
+    }
 
-//     if (!content) {
-//       return res.status(404).json({ error: 'Content not found' });
-//     }
+    // Increment likes for the existing content
+    content.likes += 1; // Increment the likes count
 
-//     // Increment likes for the existing content
-//     const updatedContent = await incrementLikes(content);
-//     console.log('Updated Content:', updatedContent);
+    // Save the updated content to the database
+    await content.save();
 
-//     res.status(200).json({ message: 'Content liked successfully' });
-//   } catch (error) {
-//     console.error('Error liking content:', error);
-//     res.status(500).json({ error: 'Failed to like content' });
-//   }
-// });
+    res.status(200).json({ message: 'Content liked successfully' });
+  } catch (error) {
+    console.error('Error liking content:', error);
+    res.status(500).json({ error: 'Failed to like content' });
+  }
+});
 
 export default router;
