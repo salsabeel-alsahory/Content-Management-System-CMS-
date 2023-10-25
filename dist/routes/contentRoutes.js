@@ -172,4 +172,34 @@ router.post('/content/like/:contentId', authMiddleware_js_1.authenticate, async 
         res.status(500).json({ error: 'Failed to like content' });
     }
 });
+// // Like an Article
+// router.post('/articles/like/:articleId', authenticate, async (req, res) => {
+//   try {
+//     const articleId = +req.params.articleId; // Convert the articleId to a number
+//     // Check if articleId is a valid number
+//     if (isNaN(articleId)) {
+//       return res.status(400).json({ error: 'Invalid articleId' });
+//     }
+//    
+//     res.status(200).json(likedArticle);
+//   } catch (error) {
+//     console.error('Error liking article:', error);
+//     res.status(500).json({ error: 'Failed to like article' });
+//   }
+// });
+// // Like a Video
+// router.post('/videos/like/:videoId', authenticate, async (req, res) => {
+//   try {
+//     const videoId = +req.params.videoId; // Convert the videoId to a number
+//     // Check if videoId is a valid number
+//     if (isNaN(videoId)) {
+//       return res.status(400).json({ error: 'Invalid videoId' });
+//     }
+//     const likedVideo = await likeVideo(videoId);
+//     res.status(200).json(likedVideo);
+//   } catch (error) {
+//     console.error('Error liking video:', error);
+//     res.status(500).json({ error: 'Failed to like video' });
+//   }
+// });
 exports.default = router;

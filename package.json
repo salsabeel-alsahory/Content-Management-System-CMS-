@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-      "build": "tsc",
-      "run-watch": "nodemon ./dist/index.js",
-      "dev": "concurrently \"npm run build\" \"npm run run-watch\""
+    "build": "tsc",
+    "run-watch": "nodemon ./dist/index.js",
+    "dev": "concurrently \"npm run build\" \"npm run run-watch\""
   },
   "author": "",
   "license": "ISC",

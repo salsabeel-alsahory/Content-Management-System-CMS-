@@ -153,4 +153,10 @@ const deleteMedia = async (id: string) => {
     }
 };
 
-export{deleteMedia,updateMedia,getAllMedia,incrementLikes,getAllVideos,getAllArticles,createArticle,createVideo,createContent,getAllContent}
+
+
+
+
+export{deleteMedia,updateMedia,getAllMedia,incrementLikes,getAllVideos,
+  getAllArticles,createArticle,createVideo,createContent,getAllContent
+}

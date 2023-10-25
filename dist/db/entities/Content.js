@@ -18,6 +18,11 @@ let Content = class Content extends typeorm_1.BaseEntity {
     getContentId() {
         return this.id;
     }
+    async like() {
+        this.likes++;
+        await this.save();
+        return this;
+    }
 };
 exports.Content = Content;
 __decorate([
@@ -51,6 +56,10 @@ exports.Content = Content = __decorate([
     (0, typeorm_1.TableInheritance)({ column: { type: "varchar", name: "content_type" } })
 ], Content);
 let Video = class Video extends Content {
+    async like() {
+        await super.like();
+        return this;
+    }
 };
 exports.Video = Video;
 __decorate([
@@ -61,6 +70,10 @@ exports.Video = Video = __decorate([
     (0, typeorm_1.Entity)()
 ], Video);
 let Article = class Article extends Content {
+    async like() {
+        await super.like();
+        return this;
+    }
 };
 exports.Article = Article;
 __decorate([
