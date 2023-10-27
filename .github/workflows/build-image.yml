@@ -31,7 +31,7 @@ jobs:
     - name: Publish docker image
       run: docker push ghcr.io/salsabeel-alsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
     - name: configure docker host
-      uses: khaledez/configure-docker-host@v2
+      uses: khaledez/configure-docker-host@v1
       with:
         host: 3.80.223.105
         user: github
@@ -44,4 +44,4 @@ jobs:
         DB_HOST: ${{ secrets.DB_HOST }}
     - name: print logs
       if: always() # This step will be executed even if previous steps fails
-      run: docker-compose -f docker-compose-prod.yml logs
+      run: docker-compose logs
