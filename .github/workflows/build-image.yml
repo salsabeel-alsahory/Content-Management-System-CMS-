@@ -44,4 +44,4 @@ jobs:
         DB_HOST: ${{ secrets.DB_HOST }}
     - name: print logs
       if: always() # This step will be executed even if previous steps fails
-      run: docker-compose logs
+      run: docker-compose -f docker-compose-prod.yml logs
