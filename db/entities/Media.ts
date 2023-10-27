@@ -23,9 +23,13 @@ export class Media extends BaseEntity {
   @Column()
   cover_image: string;
 
-  @Column("json")
-  images: { link: string }[];
-
+  // @Column("text")
+  // images: { link: string }[];
+  
+  
+  @Column({ type: 'text', nullable: false })
+      image: string;
+      
   @Column({ nullable: true })
   video_link: string;
 

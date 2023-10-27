@@ -28,9 +28,9 @@ __decorate([
     __metadata("design:type", String)
 ], Media.prototype, "cover_image", void 0);
 __decorate([
-    (0, typeorm_1.Column)("json"),
-    __metadata("design:type", Array)
-], Media.prototype, "images", void 0);
+    (0, typeorm_1.Column)({ type: 'text', nullable: false }),
+    __metadata("design:type", String)
+], Media.prototype, "image", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)

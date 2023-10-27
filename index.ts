@@ -1,5 +1,5 @@
-import AWS from 'aws-sdk';
 import express from 'express';
+import fileUpload from 'express-fileupload';
 import logger from 'morgan';
 import dataSource from './db/dataSource';
 import categoryRouter from './routes/category';
@@ -11,7 +11,8 @@ import tagRouter from './routes/tag';
 import userRouter from './routes/user.js';
 
 const app = express();
-
+app.use(express.urlencoded({ extended: false }));
+app.use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } }));
 app.use(express.json());
 app.use(logger('dev'));
 app.use('/content', contentRouter);
@@ -21,12 +22,7 @@ app.use('/role', roleRouter);
 app.use('/media', mediaRouter);
 app.use('/category', categoryRouter);
 app.use('/tag',tagRouter);
-const s3 = new AWS.S3({
-  region: 'us-east-1',
-  accessKeyId: process.env.ACCESSKEYID,
-  secretAccessKey: process.env.SECRETACCESSKEY,
-  signatureVersion: 'v4'
-});
+
 
 const PORT = process.env.PORT || 5000;
 

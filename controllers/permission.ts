@@ -1,7 +1,7 @@
+import { In } from "typeorm";
 import { Media } from "../db/entities/Media";
 import { Permission } from "../db/entities/Permission";
 import { Role } from "../db/entities/Role";
-import { In } from "typeorm";
 const createPermission = async (payload: Permission) => {
     try {
         const permission = Permission.create(payload);
@@ -38,6 +38,8 @@ const createMedia = async (payload: Media) => {
     try {
         const newMedia = new Media();
         newMedia.name = payload.name;
+        newMedia.image = payload.image;
+
         newMedia.permissions = await Permission.findBy({
                         id: In(payload.permissions)
                     });
@@ -47,4 +49,4 @@ const createMedia = async (payload: Media) => {
     }
 };
 
-export{createPermission,createMedia,getAllPermission,createRole}
+export { createMedia, createPermission, createRole, getAllPermission };
