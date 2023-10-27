@@ -10,7 +10,7 @@ services:
     volumes:
       - db-data:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 20s
@@ -22,7 +22,7 @@ services:
     container_name: express-docker
     build: .
     environment:
-      - PORT=3306
+      - PORT=80
       - DB_HOST="dbcms.crsb2fljtjso.us-east-1.rds.amazonaws.com"
       - DB_USER=sqldbcms
       - DB_PASSWORD=$DB_PASSWORD
