@@ -1,7 +1,9 @@
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import logger from 'morgan';
-import dataSource from './db/dataSource';
+import dataSource, { initDB } from './db/dataSource';
+import baseLogger from './logger.js';
+import { error404Handler, errorLogger, errorSender } from './middleware/errorHandlers/genericHandler';
 import categoryRouter from './routes/category';
 import contentRouter from './routes/contentRoutes.js';
 import mediaRouter from './routes/media.js';
@@ -9,8 +11,6 @@ import permissionRouter from './routes/permission.js';
 import roleRouter from './routes/role.js';
 import tagRouter from './routes/tag';
 import userRouter from './routes/user.js';
-import baseLogger from './logger.js';
-import { error404Handler, errorLogger, errorSender } from './middleware/errorHandlers/genericHandler';
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
