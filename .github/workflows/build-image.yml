@@ -13,6 +13,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    outputs:
+      ec2_ips: ${{ steps.get_instance_ips.outputs.ips }}
+      image_version: ${{ steps.image_version.outputs.gitsha }}
     steps:
     - uses: actions/checkout@v3
 
