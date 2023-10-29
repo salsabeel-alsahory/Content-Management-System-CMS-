@@ -33,14 +33,14 @@ jobs:
     - name: Publish docker image
       run: docker push ghcr.io/salsabeel-alsahory/contentmanagementsystem:${{ steps.image_version.outputs.gitsha }}
     - name: Get EC2 Instance IPs
-      id: instance_ips
+      id: get_instance_ips
       run: |
         instances=$(aws ec2 describe-instances --filters 'Name=tag:aws:autoscaling:groupName,Values=suzansal-sg' --query 'Reservations[*].Instances[*].PublicIpAddress' --output json | jq --compact-output 'flatten')
         echo "ips=$instances" >> $GITHUB_OUTPUT
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-        AWS_REGION: us-east-1
+        AWS_REGION: "us-east-1"
   deploy:
     needs: ["build"]
     runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
         ip: ${{ fromJson(needs.build.outputs.ec2_ips) }}
     steps:
       - name: configure docker host
-        uses: khaledez/configure-docker-host@v2
+        uses: khaledez/configure-docker-host@v1
         with:
           host: ${{ matrix.ip }}
           user: github
