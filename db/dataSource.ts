@@ -8,6 +8,7 @@ import { Profile } from "./entities/Profile";
 import { Role } from "./entities/Role";
 import { Tag } from "./entities/Tag";
 import { User } from "./entities/userdb";
+import baseLogger from '../logger';
 
 dotenv.config()
 const dataSource = new DataSource({
@@ -34,5 +35,10 @@ const dataSource = new DataSource({
     logging: false
     
 });
-
+export const initDB = async () =>
+  await dataSource.initialize().then(() => {
+    baseLogger.info("Connected to DB!");
+  }).catch(err => {
+    baseLogger.error('Failed to connect to DB: ' + err)
+  });
 export default dataSource;

@@ -14,6 +14,8 @@ const permission_js_1 = __importDefault(require("./routes/permission.js"));
 const role_js_1 = __importDefault(require("./routes/role.js"));
 const tag_1 = __importDefault(require("./routes/tag"));
 const user_js_1 = __importDefault(require("./routes/user.js"));
+const logger_js_1 = __importDefault(require("./logger.js"));
+const genericHandler_1 = require("./middleware/errorHandlers/genericHandler");
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, express_fileupload_1.default)({ limits: { fileSize: 50 * 1024 * 1024 } }));
@@ -26,12 +28,19 @@ app.use('/role', role_js_1.default);
 app.use('/media', media_js_1.default);
 app.use('/category', category_1.default);
 app.use('/tag', tag_1.default);
+app.use(genericHandler_1.errorLogger);
+app.use(genericHandler_1.errorSender);
+app.use(genericHandler_1.error404Handler);
 const PORT = process.env.PORT || 5000;
 dataSource_1.default.initialize().then(() => {
     console.log('Connected to DB!');
 }).catch(err => {
     console.error('Failed to connect to DB: ' + err);
 });
+// app.listen(PORT, () => {
+//   console.log(`App is listening on port ${PORT}`);
+// });
 app.listen(PORT, () => {
-    console.log(`App is listening on port ${PORT}`);
+    logger_js_1.default.info(`App is listening on port ${PORT}`);
+    initDB();
 });

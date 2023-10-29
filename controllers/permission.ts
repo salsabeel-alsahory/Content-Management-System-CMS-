@@ -32,21 +32,29 @@ const getAllPermission = () => {
     }
 };
 
-
-
 const createMedia = async (payload: Media) => {
     try {
-        const newMedia = new Media();
-        newMedia.name = payload.name;
-        newMedia.image = payload.image;
-
-        newMedia.permissions = await Permission.findBy({
-                        id: In(payload.permissions)
-                    });
-        await newMedia.save();
+      const newMedia = new Media();
+      newMedia.name = payload.name;
+      newMedia.image = payload.image;
+  
+      // Assuming 'permissions' is an array of permission IDs
+      newMedia.permissions = [];
+  
+      for (const permissionId of payload.permissions) {
+        const permission = await Permission.findOne(permissionId);
+        if (permission) {
+          newMedia.permissions.push(permission);
+        }
+      }
+  
+      await newMedia.save();
+  
+      return newMedia;
     } catch (error) {
-        throw ("Failed to create media: " + error);
+      throw new Error("Failed to create media: " + error);
     }
-};
+  };
+  
 
 export { createMedia, createPermission, createRole, getAllPermission };

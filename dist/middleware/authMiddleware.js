@@ -9,7 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const userdb_1 = require("../db/entities/userdb");
 dotenv_1.default.config();
 const authenticate = async (req, res, next) => {
-    const token = req.headers["authorization"] || "";
+    const token = req.headers["authorization"] || req.cookies['token'] || '';
     let validToken;
     try {
         validToken = jsonwebtoken_1.default.verify(token, process.env.SECRET_KEY || "");

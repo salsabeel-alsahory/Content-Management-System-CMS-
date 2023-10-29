@@ -27,7 +27,7 @@ export class Media extends BaseEntity {
   // images: { link: string }[];
   
   
-  @Column({ type: 'text', nullable: false })
+  @Column({ type: 'text', nullable: true })
       image: string;
       
   @Column({ nullable: true })

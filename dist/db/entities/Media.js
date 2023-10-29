@@ -28,7 +28,7 @@ __decorate([
     __metadata("design:type", String)
 ], Media.prototype, "cover_image", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'text', nullable: false }),
+    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], Media.prototype, "image", void 0);
 __decorate([

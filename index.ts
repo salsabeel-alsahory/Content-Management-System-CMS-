@@ -9,6 +9,8 @@ import permissionRouter from './routes/permission.js';
 import roleRouter from './routes/role.js';
 import tagRouter from './routes/tag';
 import userRouter from './routes/user.js';
+import baseLogger from './logger.js';
+import { error404Handler, errorLogger, errorSender } from './middleware/errorHandlers/genericHandler';
 
 const app = express();
 app.use(express.urlencoded({ extended: false }));
@@ -22,7 +24,9 @@ app.use('/role', roleRouter);
 app.use('/media', mediaRouter);
 app.use('/category', categoryRouter);
 app.use('/tag',tagRouter);
-
+app.use(errorLogger);
+app.use(errorSender);
+app.use(error404Handler);
 
 const PORT = process.env.PORT || 5000;
 
@@ -32,6 +36,11 @@ dataSource.initialize().then(() => {
   console.error('Failed to connect to DB: ' + err);
 });
 
+// app.listen(PORT, () => {
+//   console.log(`App is listening on port ${PORT}`);
+// });
+
 app.listen(PORT, () => {
-  console.log(`App is listening on port ${PORT}`);
+  baseLogger.info(`App is listening on port ${PORT}`);
+  initDB();
 });
