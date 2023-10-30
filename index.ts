@@ -29,7 +29,9 @@ app.use(errorSender);
 app.use(error404Handler);
 
 const PORT = process.env.PORT || 5000;
-
+app.get("/health", function (req, res) {
+  res.sendStatus(200);
+});
 dataSource.initialize().then(() => {
   console.log('Connected to DB!');
 }).catch(err => {

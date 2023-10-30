@@ -4,7 +4,7 @@ import { createUser, getAllUsers, login } from "../controllers/user";
 import { authenticate } from "../middleware/authMiddleware";
 
 const router = express.Router();
-//.
+//..
 router.post("/signup", signupValidationRules(), validate, async (req:any, res:any) => {
   try {
     const { email, password, userName, displayName, role } = req.body;
