@@ -55,6 +55,9 @@ app.use(genericHandler_1.errorLogger);
 app.use(genericHandler_1.errorSender);
 app.use(genericHandler_1.error404Handler);
 const PORT = process.env.PORT || 5000;
+app.get("/health", function (req, res) {
+    res.sendStatus(200);
+});
 dataSource_1.default.initialize().then(() => {
     console.log('Connected to DB!');
 }).catch(err => {

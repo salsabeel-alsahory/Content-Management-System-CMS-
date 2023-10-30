@@ -38,7 +38,7 @@ dataSource.initialize().then(() => {
   console.error('Failed to connect to DB: ' + err);
 });
 
-// app.listen(PORT, () => {
+// app.listen(PORT, () => {.
 //   console.log(`App is listening on port ${PORT}`);
 // });
 
