@@ -35,10 +35,10 @@ const dataSource = new DataSource({
     logging: false
     
 });
-export const initDB = async () =>
-  await dataSource.initialize().then(() => {
-    baseLogger.info("Connected to DB!");
-  }).catch(err => {
-    baseLogger.error('Failed to connect to DB: ' + err)
-  });
+// export const initDB = async () =>
+//   await dataSource.initialize().then(() => {
+//     baseLogger.info("Connected to DB!");
+//   }).catch(err => {
+//     baseLogger.error('Failed to connect to DB: ' + err)
+//   });
 export default dataSource;

@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.initDB = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const typeorm_1 = require("typeorm");
 const Category_1 = require("./entities/Category");
@@ -14,7 +13,6 @@ const Profile_1 = require("./entities/Profile");
 const Role_1 = require("./entities/Role");
 const Tag_1 = require("./entities/Tag");
 const userdb_1 = require("./entities/userdb");
-const logger_1 = __importDefault(require("../logger"));
 dotenv_1.default.config();
 const dataSource = new typeorm_1.DataSource({
     type: 'mysql',
@@ -39,10 +37,10 @@ const dataSource = new typeorm_1.DataSource({
     synchronize: true,
     logging: false
 });
-const initDB = async () => await dataSource.initialize().then(() => {
-    logger_1.default.info("Connected to DB!");
-}).catch(err => {
-    logger_1.default.error('Failed to connect to DB: ' + err);
-});
-exports.initDB = initDB;
+// export const initDB = async () =>
+//   await dataSource.initialize().then(() => {
+//     baseLogger.info("Connected to DB!");
+//   }).catch(err => {
+//     baseLogger.error('Failed to connect to DB: ' + err)
+//   });
 exports.default = dataSource;

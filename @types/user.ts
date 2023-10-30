@@ -14,7 +14,7 @@ export namespace UserNS {
     export interface Role {
         id: number,
         name: 'user' | 'admin' | 'editor',
-        permission: number
+        permissions: number[];
     }
     export interface Permission {
         id: number,

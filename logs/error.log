@@ -1,2 +1,11 @@
 {"level":"info","message":"App is listening on port 5000","project":"Content-Management-System-CMS-","time":"2023-10-30T10:48:17.375Z"}
 {"level":"info","message":"Connected to DB!","project":"Content-Management-System-CMS-","time":"2023-10-30T10:48:17.375Z"}
+{"level":"info","message":"App is listening on port 5000","project":"Content-Management-System-CMS-","time":"2023-10-30T20:39:56.808Z"}
+{"level":"info","message":"App is listening on port 5000","project":"Content-Management-System-CMS-","time":"2023-10-30T20:40:13.287Z"}
+{"level":"info","message":"App is listening on port 5000","project":"Content-Management-System-CMS-","time":"2023-10-30T20:40:41.994Z"}
+{"level":"error","message":"Failed to connect to DB: CannotExecuteNotConnectedError: Cannot execute operation on \"default\" connection because connection is not yet established.","project":"Content-Management-System-CMS-","time":"2023-10-30T20:40:41.994Z"}
+{"level":"info","message":"App is listening on port 5000","project":"Content-Management-System-CMS-","time":"2023-10-30T20:41:34.786Z"}
+{"level":"info","message":"App is listening on port 5000","project":"Content-Management-System-CMS-","time":"2023-10-30T20:41:43.793Z"}
+{"level":"info","message":"App is listening on port 5000","project":"Content-Management-System-CMS-","time":"2023-10-30T20:42:55.866Z"}
+{"level":"info","message":"App is listening on port 5000","project":"Content-Management-System-CMS-","time":"2023-10-30T20:43:03.822Z"}
+{"level":"info","message":"App is listening on port 5000","project":"Content-Management-System-CMS-","time":"2023-10-30T20:45:19.090Z"}
