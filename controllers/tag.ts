@@ -1,3 +1,4 @@
+import { ILike, Like, getRepository } from "typeorm";
 import { Tag } from "../db/entities/Tag";
 
 const createTag = async (title: string): Promise<Tag> => {
@@ -44,6 +45,48 @@ const updateTag = async (tagId: number, title: string): Promise<Tag | null> => {
         throw error; // Handle the error as needed
     }
 };
+const getAllTags = async () => {
+    try {
+      const tagRepository = getRepository(Tag);
+      const tags = await tagRepository.find();
+  
+      return tags;
+    } catch (error) {
+      throw new Error('Failed to retrieve tags: ' + error);
+    }
+  };
 
-  export{createTag, deleteTag,updateTag}
+// Modify your searchTags function to accept the search query
+// const searchTags = async (searchTerm: string) => {
+//     try {
+//       // Implement your tag search logic here
+//       const tags = await Tag.find({ where: { title: Like(`%${searchTerm}%`) } });
+  
+//       return tags;
+//     } catch (error) {
+//       console.error('Error searching for tags:', error);
+//       throw new Error('Failed to search for tags');
+//     }
+//   };
+const searchTags = async (searchTerm: string) => {
+    try {
+      if (!searchTerm) {
+        return []; // Return an empty array if searchTerm is not provided
+      }
+  
+      const tagRepository = getRepository(Tag);
+      const tags = await tagRepository.find({
+        where: {
+          title: ILike(`%${searchTerm}%`), // Perform a case-insensitive search
+        },
+      });
+  
+      return tags;
+    } catch (error) {
+      console.error('Error searching for tags:', error);
+      throw new Error('Failed to search for tags');
+    }
+  };
+  
+  export{createTag, deleteTag,updateTag,getAllTags, searchTags }
   
