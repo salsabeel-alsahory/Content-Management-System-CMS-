@@ -44,7 +44,8 @@ const  login = async (email: string, password: string) => {
             });
 
             return {
-                user,
+                name: user.displayName, // Assuming displayName is the name property
+                email: user.email,
                 token
             };
         } else {
@@ -76,5 +77,5 @@ const getAllRoles = () => {
 
 
 
-export { createUser,  getAllRoles, getAllUsers,login,  };
+export { createUser,  getAllRoles, getAllUsers,login};
 
