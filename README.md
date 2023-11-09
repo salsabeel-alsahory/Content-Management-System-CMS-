@@ -1,4 +1,8 @@
 # Content-Management-System 
+Welcome to the Content Management System (CMS) project, an initiative built during a training program with GSG (Gaza Sky Geeks). This project is the culmination of a comprehensive learning journey, where we, Suzan Ayesh and Salsabeel Alsahory, have applied an array of technologies and practices to create a robust and scalable CMS.
+
+This README will guide you through the project's structure, setup, and deployment, providing you with the necessary details to understand and contribute to the project.
+
 ## Project Description
 This project is a Content Management System (CMS) designed to handle digital content with ease and efficiency. It allows users to create, manage, and publish content without needing technical knowledge.
 
