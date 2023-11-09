@@ -1,15 +1,15 @@
-import { QueryFailedError } from "typeorm";
+import { QueryFailedError} from "typeorm";
 import { Article, Content, Video } from "../db/entities/Content";
 import { Media } from "../db/entities/Media";
 
-const getAllContent = () => {
-    try {
-        const content = Content.find();
-        return content;
-    } catch (error) {
-        throw ("Something went wrong");
-    }
-};
+// const getAllContent = () => {
+//     try {
+//         const content = Content.find();
+//         return content;
+//     } catch (error) {
+//         throw ("Something went wrong");
+//     }
+// };
 
 const createContent = async (payload: Content) => {
     try {
@@ -153,6 +153,32 @@ const deleteMedia = async (id: string) => {
     }
 };
 
+
+const getAllContent = (searchTerm?: string, mediaTypeFilter?: string, page = 1, pageSize = 10) => {
+    try {
+        let queryBuilder = Content.createQueryBuilder("content");
+
+        // Search
+        if (searchTerm) {
+            queryBuilder = queryBuilder.where("content.title LIKE :searchTerm", { searchTerm: `%${searchTerm}%` });
+        }
+
+        // Filter by media type
+        if (mediaTypeFilter) {
+            queryBuilder = queryBuilder.innerJoinAndSelect("content.media", "media", "media.type = :mediaTypeFilter", { mediaTypeFilter });
+        }
+
+        // Pagination
+        const content = queryBuilder
+            .skip((page - 1) * pageSize)
+            .take(pageSize)
+            .getMany();
+
+        return content;
+    } catch (error) {
+        throw ("Something went wrong");
+    }
+};
 
 
 

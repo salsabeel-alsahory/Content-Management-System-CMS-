@@ -56,14 +56,32 @@ const  login = async (email: string, password: string) => {
     }
 };
 
-const getAllUsers = () => {
+const getAllUsers = (searchTerm?: string, roleFilter?: string, page = 1, pageSize = 10) => {
     try {
-        const users = User.find();
+        let queryBuilder = User.createQueryBuilder("user");
+
+        // Search
+        if (searchTerm) {
+            queryBuilder = queryBuilder.where("user.displayName LIKE :searchTerm OR user.email LIKE :searchTerm", { searchTerm: `%${searchTerm}%` });
+        }
+
+        // Filter by role
+        if (roleFilter) {
+            queryBuilder = queryBuilder.innerJoinAndSelect("user.roles", "role", "role.name = :roleFilter", { roleFilter });
+        }
+
+        // Pagination
+        const users = queryBuilder
+            .skip((page - 1) * pageSize)
+            .take(pageSize)
+            .getMany();
+
         return users;
     } catch (error) {
         throw ("Something went wrong");
     }
 };
+
 
 const getAllRoles = () => {
     try {
@@ -77,5 +95,5 @@ const getAllRoles = () => {
 
 
 
-export { createUser,  getAllRoles, getAllUsers,login};
+export { createUser, getAllUsers,login,getAllRoles};
 

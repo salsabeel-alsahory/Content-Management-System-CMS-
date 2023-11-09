@@ -19,7 +19,7 @@ app.use(fileUpload({ limits: { fileSize: 50 * 1024 * 1024 } }));
 app.use(express.json());
 app.use(logger('dev'));
 app.use('/', contentRouter);
-app.use('/', userRouter);
+app.use('/user', userRouter);
 app.use('/', permissionRouter);
 app.use('/', roleRouter);
 app.use('/', mediaRouter);

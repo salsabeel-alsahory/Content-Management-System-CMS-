@@ -23,7 +23,7 @@ app.use((0, express_fileupload_1.default)({ limits: { fileSize: 50 * 1024 * 1024
 app.use(express_1.default.json());
 app.use((0, morgan_1.default)('dev'));
 app.use('/', contentRoutes_js_1.default);
-app.use('/', user_js_1.default);
+app.use('/user', user_js_1.default);
 app.use('/', permission_js_1.default);
 app.use('/', role_js_1.default);
 app.use('/', media_js_1.default);

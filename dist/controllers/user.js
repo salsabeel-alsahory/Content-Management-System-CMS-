@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.getAllUsers = exports.getAllRoles = exports.createUser = void 0;
+exports.getAllRoles = exports.login = exports.getAllUsers = exports.createUser = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dataSource_js_1 = __importDefault(require("../db/dataSource.js"));
@@ -43,7 +43,8 @@ const login = async (email, password) => {
                 expiresIn: "14d"
             });
             return {
-                user,
+                name: user.displayName,
+                email: user.email,
                 token
             };
         }
@@ -56,9 +57,22 @@ const login = async (email, password) => {
     }
 };
 exports.login = login;
-const getAllUsers = () => {
+const getAllUsers = (searchTerm, roleFilter, page = 1, pageSize = 10) => {
     try {
-        const users = userdb_js_1.User.find();
+        let queryBuilder = userdb_js_1.User.createQueryBuilder("user");
+        // Search
+        if (searchTerm) {
+            queryBuilder = queryBuilder.where("user.displayName LIKE :searchTerm OR user.email LIKE :searchTerm", { searchTerm: `%${searchTerm}%` });
+        }
+        // Filter by role
+        if (roleFilter) {
+            queryBuilder = queryBuilder.innerJoinAndSelect("user.roles", "role", "role.name = :roleFilter", { roleFilter });
+        }
+        // Pagination
+        const users = queryBuilder
+            .skip((page - 1) * pageSize)
+            .take(pageSize)
+            .getMany();
         return users;
     }
     catch (error) {
