@@ -34,3 +34,23 @@ To get a local copy up and running, follow these simple steps.
 2. npm install
 3. docker-compose up --build
 4. nmp run dev
+## .env
+You should build file with name `.env` with those varible the create then in github value
+### Database Configuration
+
+1. DB_HOST=your_database_host
+2. DB_PORT=your_database_port
+3. DB_USERNAME=your_database_username
+4. DB_PASSWORD=your_database_password
+5. DB_NAME=your_database_name
+### AWS Configuration
+6. AWS_REGION=your_aws_region
+7. ACCESSKEYID=your_aws_access_key_id
+8. SECRETACCESSKEY=your_aws_secret_access_key
+### Application Secrets
+9. SECRET_KEY=your_secret_key_for_jwt_or_other_encryption_techniques
+### GitHub Token for CI/CD Actions
+GITHUB_TOKEN=your_github_token_for_actions
+
+
+
