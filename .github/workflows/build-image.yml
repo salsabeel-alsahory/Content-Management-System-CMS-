@@ -63,7 +63,7 @@ jobs:
           username: salsabeel-alsahory
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: deploy
-        run: docker-compose -f docker-compose-prod.yml up -d
+        run: docker compose -f docker-compose-prod.yml up -d --remove-orphans && docker system prune -af
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           GIT_VERSION: ${{ needs.build.outputs.image_version }}
