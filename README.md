@@ -14,7 +14,7 @@ This project is a Content Management System (CMS) designed to handle digital con
 - Authentication: [JWT]
 - Containerization: Docker
 - CI/CD: GitHub Actions
-- Cloud: AWS Services including S3 for storage, EC2 for compute power, and RDS for relational database management
+- Cloud: AWS Services including S3 for storage, EC2 for compute power, and RDS for relational database management, and (ASG-LB-TG)
 ## File Structure
 - `Category.ts`: Defines the category schema for content categorization.
 - `Content.ts`: Handles the content items and their related operations.
@@ -34,7 +34,7 @@ To get a local copy up and running, follow these simple steps.
 You should build file with name `.env` with those varible the create then in github value
 ### Database Configuration
 
-1. DB_HOST=your_database_host
+1. DB_HOST=your_database_host or DNS link if you use RDS DB
 2. DB_PORT=your_database_port
 3. DB_USERNAME=your_database_username
 4. DB_PASSWORD=your_database_password
