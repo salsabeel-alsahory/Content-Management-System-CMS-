@@ -87,6 +87,16 @@ const searchTags = async (searchTerm: string) => {
       throw new Error('Failed to search for tags');
     }
   };
-  
-  export{createTag, deleteTag,updateTag,getAllTags, searchTags }
+  const findTags = async (searchTerm: string): Promise<Tag[]> => {
+    try {
+      return await Tag.find({
+        where: {
+          title: ILike(`%${searchTerm}%`) // This uses ILike for case-insensitive search
+        }
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+  export{createTag, deleteTag,updateTag,getAllTags, searchTags ,findTags}
   

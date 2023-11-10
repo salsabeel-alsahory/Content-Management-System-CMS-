@@ -1,5 +1,5 @@
 import express from "express";
-import { createTag,updateTag,deleteTag, getAllTags, searchTags} from '../controllers/tag'
+import { createTag,updateTag,deleteTag, getAllTags, searchTags, findTags} from '../controllers/tag'
 
 const router = express.Router();
 
@@ -90,6 +90,26 @@ router.put('/tags/:tagId', async (req, res) => {
     }
   });
   
-  
+  // Define a route for finding tags
+router.get('/tags/find', async (req, res) => {
+  try {
+    const { searchTerm } = req.query;
+
+    // Ensure searchTerm is a string
+    const searchQuery = Array.isArray(searchTerm) ? searchTerm[0] : searchTerm;
+
+    if (typeof searchQuery !== 'string') {
+      return res.status(400).json({ error: 'Search term is required' });
+    }
+
+    // Call the findTags function to search for tags by title
+    const tags = await findTags(searchQuery);
+
+    res.status(200).json(tags);
+  } catch (error) {
+    console.error('Error finding tags:', error);
+    res.status(500).json({ error: 'Failed to find tags' });
+  }
+});
 
 export default router;
