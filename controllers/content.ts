@@ -1,4 +1,4 @@
-import { QueryFailedError} from "typeorm";
+import { ILike, QueryFailedError} from "typeorm";
 import { Article, Content, Video } from "../db/entities/Content";
 import { Media } from "../db/entities/Media";
 
@@ -9,6 +9,33 @@ import { Media } from "../db/entities/Media";
 //     } catch (error) {
 //         throw ("Something went wrong");
 //     }
+// };
+
+
+// const getAllContent = async (searchTerm?: string, mediaTypeFilter?: string, page = 1, pageSize = 10) => {
+//   try {
+//       let queryBuilder = Content.createQueryBuilder("content");
+
+//       // Search
+//       if (searchTerm) {
+//           queryBuilder = queryBuilder.where("content.title LIKE :searchTerm", { searchTerm: `%${searchTerm}%` });
+//       }
+
+//       // Filter by media type
+//       if (mediaTypeFilter) {
+//           queryBuilder = queryBuilder.innerJoinAndSelect("content.media", "media", "media.type = :mediaTypeFilter", { mediaTypeFilter });
+//       }
+
+//       // Pagination
+//       queryBuilder = queryBuilder.skip((page - 1) * pageSize).take(pageSize);
+
+//       // Get paginated result and total count
+//       const [content, totalCount] = await queryBuilder.getManyAndCount();
+
+//       return { content, totalCount };
+//   } catch (error) {
+//       throw new Error("Failed to fetch content: " + error);
+//   }
 // };
 
 const createContent = async (payload: Content) => {
@@ -154,31 +181,74 @@ const deleteMedia = async (id: string) => {
 };
 
 
-const getAllContent = (searchTerm?: string, mediaTypeFilter?: string, page = 1, pageSize = 10) => {
-    try {
-        let queryBuilder = Content.createQueryBuilder("content");
+const getAllContent = async (
+  searchTerm?: string,
+  mediaTypeFilter?: string,
+  page: number = 1,
+  pageSize: number = 10
+) => {
+  try {
+      const queryBuilder = Content.createQueryBuilder("content");
 
-        // Search
-        if (searchTerm) {
-            queryBuilder = queryBuilder.where("content.title LIKE :searchTerm", { searchTerm: `%${searchTerm}%` });
-        }
+      // Advanced search logic
+      if (searchTerm) {
+          queryBuilder.where([
+              { title: ILike(`%${searchTerm}%`) },
+              { description: ILike(`%${searchTerm}%`) },
+              { tags: ILike(`%${searchTerm}%`) }
+          ]);
+      }
 
-        // Filter by media type
-        if (mediaTypeFilter) {
-            queryBuilder = queryBuilder.innerJoinAndSelect("content.media", "media", "media.type = :mediaTypeFilter", { mediaTypeFilter });
-        }
+      // Filter by media type
+      if (mediaTypeFilter) {
+          queryBuilder.andWhere("content.mediaType = :mediaTypeFilter", { mediaTypeFilter });
+      }
 
-        // Pagination
-        const content = queryBuilder
-            .skip((page - 1) * pageSize)
-            .take(pageSize)
-            .getMany();
+      // Add pagination
+      queryBuilder
+          .skip((page - 1) * pageSize)
+          .take(pageSize);
 
-        return content;
-    } catch (error) {
-        throw ("Something went wrong");
-    }
+      const [contents, total] = await queryBuilder.getManyAndCount();
+
+      return {
+          data: contents,
+          total,
+          page,
+          totalPages: Math.ceil(total / pageSize)
+      };
+  } catch (error) {
+      console.error("Error fetching content:", error);
+      throw new Error("Failed to fetch content");
+  }
 };
+
+
+// const getAllContent = (searchTerm?: string, mediaTypeFilter?: string, page = 1, pageSize = 10) => {
+//     try {
+//         let queryBuilder = Content.createQueryBuilder("content");
+
+//         // Search
+//         if (searchTerm) {
+//             queryBuilder = queryBuilder.where("content.title LIKE :searchTerm", { searchTerm: `%${searchTerm}%` });
+//         }
+
+//         // Filter by media type
+//         if (mediaTypeFilter) {
+//             queryBuilder = queryBuilder.innerJoinAndSelect("content.media", "media", "media.type = :mediaTypeFilter", { mediaTypeFilter });
+//         }
+
+//         // Pagination
+//         const content = queryBuilder
+//             .skip((page - 1) * pageSize)
+//             .take(pageSize)
+//             .getMany();
+
+//         return content;
+//     } catch (error) {
+//         throw ("Something went wrong");
+//     }
+// };
 
 
 

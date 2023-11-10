@@ -1,8 +1,9 @@
 import express from 'express';
 import { Article, Content } from '../db/entities/Content.js';
 import { authenticate } from '../middleware/authMiddleware.js';
-import { createArticle, createContent, createVideo,  getAllArticles, getAllContent,  getAllVideos 
+import { createArticle, createContent, createVideo,  getAllArticles,  getAllContent,  getAllVideos 
 } from '../controllers/content.js';
+import { ILike } from 'typeorm';
 const router = express.Router();
 
 
@@ -12,17 +13,31 @@ const router = express.Router();
 
 //router.get('/content', authenticate, authorize('view_content'),(req, res) => {
 
-router.get('/content', authenticate, (req, res) => {
-  getAllContent()
-    .then((data) => {
-      res.status(200).send(data);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send(err);
-    });
-});
+// router.get('/content', authenticate, (req, res) => {
+//   getAllContent()
+//     .then((data) => {
+//       res.status(200).send(data);
+//     })
+//     .catch(err => {
+//       console.error(err);
+//       res.status(500).send(err);
+//     });
+// });
 //router.post('/content', authenticate,authorize('create_content'), (req, res) => {
+  router.get('/content', async (req, res) => {
+    try {
+        const searchTerm = req.query.searchTerm as string;
+        const mediaTypeFilter = req.query.mediaTypeFilter as string;
+        const page = parseInt(req.query.page as string) || 1;
+        const pageSize = parseInt(req.query.pageSize as string) || 10;
+
+        const content = await getAllContent(searchTerm, mediaTypeFilter, page, pageSize);
+        res.json(content);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to retrieve content' });
+    }
+});
+
 
 router.post('/content', authenticate, (req, res) => {
   createContent(req.body)
@@ -198,7 +213,6 @@ router.post('/content/like/:contentId', authenticate, async (req, res) => {
     res.status(500).json({ error: 'Failed to like content' });
   }
 });
-
 
 
 export default router;
