@@ -1,6 +1,7 @@
-# Content-Management-System 
-Welcome to the Content Management System (CMS) project, an initiative built during a training program with GSG (Gaza Sky Geeks). This project is the culmination of a comprehensive learning journey, where we, Suzan Ayesh and Salsabeel Alsahory, have applied an array of technologies and practices to create a robust and scalable CMS.
 
+# Content-Management-System 
+Welcome to the Content Management System (CMS) project, an initiative built after the training program with GSG (Gaza Sky Geeks). This project is the culmination of a comprehensive learning journey, where we, Suzan Ayesh and Salsabeel Alsahory, have applied this  project less than month and with an array of technologies and practices to create a robust and scalable CMS.
+![DALL·E 2023-11-09 14 38 05 - Design a sleek and modern logo for a Content Management System (CMS) website  The logo should feature a stylized image of a computer mouse intertwined](https://github.com/salsabeel-alsahory/Content-Management-System-CMS-/assets/100838193/8f775777-2be7-48bb-b9ef-1f19fb9b9abb)
 This README will guide you through the project's structure, setup, and deployment, providing you with the necessary details to understand and contribute to the project.
 
 ## Project Description
@@ -28,12 +29,6 @@ To get a local copy up and running, follow these simple steps.
 ### Prerequisites
 - Node.js
 - Docker
-
-### Installation
-1. Clone the repo
-2. npm install
-3. docker-compose up --build
-4. nmp run dev
 ## .env
 You should build file with name `.env` with those varible the create then in github value
 ### Database Configuration
@@ -50,7 +45,32 @@ You should build file with name `.env` with those varible the create then in git
 ### Application Secrets
 9. SECRET_KEY=your_secret_key_for_jwt_or_other_encryption_techniques
 ### GitHub Token for CI/CD Actions
-GITHUB_TOKEN=your_github_token_for_actions
+10. GITHUB_TOKEN=your_github_token_for_actions
+### Installation
+1. Clone the repo
+2. npm install
+3. docker-compose up --build
+## Testing
+To run the automated tests for this system, you can use the following command:
+npm run dev 
+## Usage
+After installation, you can start using the CMS to manage your content. Here are a few common operations:
+- Create a new article: ...
+- Update an existing article: ...
+- Delete an article: ...
+## API Endpoints
+The CMS provides a RESTful API to interact with the content programmatically. Below are some of the available endpoints:
+- `GET http://localhost:5000/tags/find?searchTerm=software`: search on specifice tag
+- `POST http://localhost:5000/tags`: get all users
+- `PUT http://localhost:3000/tags/{tagId}`: Update tag by ID
+- `DELETE http://localhost:3000/tags/{tagId}`: Delete tag by ID
+## Contact
+For support or to contact the maintainers, please e-mail us at:
 
+* Suzan Ayesh - suzan.ayesh11@gmail.com
+* Salsabeel Alsahory - salsabeel.alsahoury@gmail.com
+
+## Acknowledgment
+* Special thanks to [GSG](https://gazaskygeeks.com/) for providing the learning environment.
 
 
