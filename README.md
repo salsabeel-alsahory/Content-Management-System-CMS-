@@ -1,7 +1,8 @@
 
 # Content-Management-System 
 Welcome to the Content Management System (CMS) project, an initiative built after the training program with GSG (Gaza Sky Geeks). This project is the culmination of a comprehensive learning journey, where we, Suzan Ayesh and Salsabeel Alsahory, have applied this  project less than month and with an array of technologies and practices to create a robust and scalable CMS.
-![DALL·E 2023-11-09 14 38 05 - Design a sleek and modern logo for a Content Management System (CMS) website  The logo should feature a stylized image of a computer mouse intertwined](https://github.com/salsabeel-alsahory/Content-Management-System-CMS-/assets/100838193/8f775777-2be7-48bb-b9ef-1f19fb9b9abb)
+![cms](https://github.com/salsabeel-alsahory/Content-Management-System-CMS-/assets/100838193/538cea0b-ae17-4fcf-8c4e-264190d1fd4a)
+
 This README will guide you through the project's structure, setup, and deployment, providing you with the necessary details to understand and contribute to the project.
 
 ## Project Description
